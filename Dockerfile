@@ -12,4 +12,5 @@ COPY . .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir uv
 RUN uv pip install -e . --system
+RUN uv pip install numba
 ENV PYTHONPATH=$PYTHONPATH:/workspace/service
