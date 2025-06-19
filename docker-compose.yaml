@@ -16,6 +16,12 @@ services:
           memory: 4gb
           cpus: "8.0"
 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
     restart: always
 
   triton:
@@ -67,12 +73,26 @@ services:
     networks:
       - rag
 
+    depends_on:
+      triton:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+
     ipc: host
     pid: host
     volumes:
       - ./logs:/workspace/service/logs
       - ./src:/workspace/service/src
-    env_file: .env
+
+    environment:
+      - TRITON__HOST=triton
+      - TRITON__PORT=8001
+      - QDRANT__HOST=qdrant
+      - QDRANT__HTTP_PORT=6333
+      - QDRANT__GRPC_PORT=6334
+      - QDRANT__USE_SECURE=0
+      - QDRANT__USE_GRPC=1
     shm_size: 8gb
     restart: always
   
