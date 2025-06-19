@@ -1,19 +1,5 @@
 services:
 
-  postgres:
-    image: postgres:15
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    
-    networks:
-      - rag
-
-    restart: always
-
   qdrant:
     image: qdrant/qdrant
     volumes:
@@ -67,11 +53,14 @@ services:
     command: [
       "python",
       "-m",
-      "src.service",
+      "src.server.server",
       "--host",
       "0.0.0.0",
       "--port",
-      "50081"]
+      "50081",
+      "--config",
+      "/workspace/service/config/service.yaml"
+    ]
     ports:
       - 50081:50081
     
@@ -81,7 +70,7 @@ services:
     ipc: host
     pid: host
     volumes:
-      - ./logs:/worksp5ce/service/logs
+      - ./logs:/workspace/service/logs
       - ./src:/workspace/service/src
     env_file: .env
     shm_size: 8gb

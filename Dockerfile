@@ -10,5 +10,6 @@ RUN apt-get install -y wget
 WORKDIR /workspace/service
 COPY . .
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir uv
+RUN uv pip install -e . --system
 ENV PYTHONPATH=$PYTHONPATH:/workspace/service
