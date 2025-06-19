@@ -1,0 +1,68 @@
+services:
+
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+    networks:
+      - rag
+
+    restart: always
+
+  qdrant:
+    image: qdrant/qdrant
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    ports:
+      - 6333:6333
+      - 6334:6334
+    networks:
+      - rag
+    
+    deploy:
+      resources:
+        limits:
+          memory: 4gb
+          cpus: "8.0"
+
+    restart: always
+
+  triton:
+    image: nvcr.io/nvidia/tritonserver:25.04-py3
+    ipc: host
+    pid: host
+    command: tritonserver --model-repository=/models
+    volumes:
+      - ./models:/models
+      - ./trace:/trace
+    ports:
+      - 8000:8000
+      - 8001:8001
+      - 8002:8002
+    networks:
+      - rag
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v2/health/ready"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 8gb
+          cpus: "8.0"
+
+    shm_size: 8Gb
+    restart: always
+
+volumes:
+  pgdata:
+
+networks:
+  rag:
+    driver: bridge

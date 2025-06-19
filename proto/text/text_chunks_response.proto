@@ -1,0 +1,19 @@
+syntax = "proto3";
+package text;
+
+
+message DocumentChunk {
+    string document_id = 2;
+    string content = 3;
+    string source = 4;
+    string collection = 5;
+    repeated string tags = 6;    
+    repeated float embedding = 7;
+    float created_at = 8;
+}
+
+
+message TextChunksResponse {
+    int64 request_id = 1;
+    repeated DocumentChunk chunks = 2;
+}

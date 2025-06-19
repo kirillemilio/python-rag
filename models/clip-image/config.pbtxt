@@ -1,0 +1,35 @@
+platform: "onnxruntime_onnx"
+
+dynamic_batching { }
+
+response_cache {
+  enable: true
+}
+
+instance_group [
+  {
+    count: 2
+    kind: KIND_CPU
+  }
+]
+
+input [
+ {
+    name: "pixel_values"
+    data_type: TYPE_FP32
+    dims: [-1, 3, 224, 224]
+ }
+]
+output [
+  {
+    name: "hidden"
+    data_type: TYPE_FP32
+    dims: [-1, 50, 768]
+  },
+  {
+    name: "embeddings"
+    data_type: TYPE_FP32
+    dims: [-1, 512]
+  }
+
+]

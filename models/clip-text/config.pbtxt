@@ -1,0 +1,41 @@
+platform: "onnxruntime_onnx"
+
+dynamic_batching { }
+
+response_cache {
+  enable: true
+}
+
+instance_group [
+  {
+    count: 2
+    kind: KIND_CPU
+  }
+]
+
+input [
+ {
+    name: "input_ids"
+    # name: "images"
+    data_type: TYPE_INT64
+    dims: [-1, -1]
+ },
+ {
+    name: "attention_mask"
+    data_type: TYPE_INT64,
+    dims: [-1, -1]
+ }
+]
+output [
+  {
+    name: "hidden"
+    data_type: TYPE_FP32
+    dims: [-1, -1, 512]
+  },
+  {
+    name: "embeddings"
+    data_type: TYPE_FP32
+    dims: [-1, 512]
+  }
+
+]

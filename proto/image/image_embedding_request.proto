@@ -1,0 +1,11 @@
+syntax = "proto3";
+package image;
+
+
+message ImageRequest {
+    int64 request_id = 1;
+    bytes image = 2;
+    string source = 3;
+    repeated string tags = 4;
+    string model = 5;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+package retriever;
+
+import "proto/text/text_chunks_response.proto";
+import "proto/text/text_embedding_request.proto";
+import "proto/text/text_document_add_request.proto";
+import "proto/text/text_document_add_response.proto";
+import "proto/image/image_embedding_request.proto";
+
+
+option go_package="retriever/proto";
+
+
+service Retriever {
+
+    rpc AddTextDocument(text.TextDocumentAddRequest) returns (text.TextDocumentAddResponse) {}
+
+    rpc SearchByText(text.TextRequest) returns (text.TextChunksResponse) {}
+
+    rpc SearchByImage(image.ImageRequest) returns (text.TextChunksResponse) {}
+}

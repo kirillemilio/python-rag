@@ -1,0 +1,9 @@
+syntax = "proto3";
+package text;
+
+
+message TextResponse {
+    int64 request_id = 1;
+    string model = 3;
+    repeated float embeddings = 4;
+}

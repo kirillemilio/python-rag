@@ -1,0 +1,11 @@
+syntax = "proto3";
+package text;
+
+
+message TextDocumentAddRequest {
+    int64 request_id = 1;
+    string text = 2;
+    string source = 3;
+    repeated string tags  = 4;
+    repeated string models = 5;
+}

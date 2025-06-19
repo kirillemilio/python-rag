@@ -1,0 +1,54 @@
+chunker:
+  chunker_type: "recursive"
+  chunk_size: 77
+  chunk_overlap: 32
+
+text_encoders:
+  clip:
+    name: "clip-text"
+    vector_size: 512
+    distance: "cosine"
+    hnsw_m: 16
+    compression: "x8"
+  mpnet:
+    name: "mpnet"
+    vector_size: 768
+    distance: "cosine"
+    hnsw_m: 16
+    compression: "x16"
+
+image_encoders:
+  clip:
+    name: "clip-image"
+    vector_size: 512
+    distance: "cosine"
+    hnsw_m: 16
+    compression: "x8"
+
+models_pool:
+  - name: "clip-image"
+    model_type: "image-encoder"
+    arch_type: "clip-image"
+    image_input_name: "pixel_values"
+    hidden_output_name: "hidden"
+    embeddings_output_name: "embeddings"
+    input_size: { "h": 224, "w": 224 }
+    embedding_size: 512
+
+  - name: "clip-text"
+    model_type: "text-encoder"
+    arch_type: "clip-text"
+    text_input_name: "input_ids"
+    mask_input_name: "attention_mask"
+    hidden_output_name: "hidden"
+    embeddings_output_name: "embeddings"
+    embedding_size: 512
+
+  - name: "mpnet"
+    model_type: "text-encoder"
+    arch_type: "mpnet"
+    text_input_name: "input_ids"
+    mask_input_name: "attention_mask"
+    hidden_output_name: "last_hidden_state"
+    embeddings_output_name: "1782"
+    embedding_size: 768
