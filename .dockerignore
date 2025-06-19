@@ -44,5 +44,3 @@ test-shop-videos
 **/*.pth
 **/*.pt
 **/cv_meta
-LICENSE
-README.md

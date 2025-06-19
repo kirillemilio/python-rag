@@ -52,21 +52,18 @@ Configurable via:
 
 Example `.env` file:
 ```dotenv
-TRITON_HTTP_PORT=8000
-TRITON_GRPC_PORT=8001
-TRITON_HOST=triton
-TRITON_MODEL_NAME=mpnet
+POSTGRES_USER=appuser
+POSTGRES_PASSWORD=apppassword
+POSTGRES_DB=appdb
 
-QDRANT_HOST=qdrant
-QDRANT_HTTP_PORT=6333
-QDRANT_GRPC_PORT=6334
-QDRANT_USE_GRPC=true
-QDRANT_USE_SECURE=false
-QDRANT_TIMEOUT=10.0
+TRITON__HOST=0.0.0.0
+TRITON__PORT=8001
 
-COLLECTION_NAME=clip-image
-VECTOR_SIZE=768
-DISTANCE=cosine
+QDRANT__HOST=0.0.0.0
+QDRANT__HTTP_PORT=6333
+QDRANT__GRPC_PORT=6334
+QDRANT__USE_SECURE=0
+QDRANT__USE_GRPC=1
 ```
 
 ---
@@ -117,11 +114,40 @@ All functionality is exposed via gRPC.
 
 ### Example Methods
 
-- `SearchByText`: Generate embedding via Triton → search in Qdrant  
-- `InsertChunk`: Add a new embedding vector to collection  
-- `DeleteById`: Remove a vector from Qdrant  
-- `ClearCollection`: Drop all vectors
+```python3
+from grpclib.client import Channel
+from tqdm import tqdm
+from python_rag.proto.retriever import RetrieverStub
+from python_rag.proto.text import TextDocumentAddRequest, TextRequest
 
+channel = Channel("localhost", port=50081)
+client = RetrieverStub(channel)
+
+# Batch add
+for i, x in tqdm(enumerate(processed)):
+    if not x:
+        continue
+    await client.add_text_document(
+        message=TextDocumentAddRequest(
+            request_id=i,
+            text=x,
+            source="manual",
+            tags=["manual"],
+            models=["clip", "mpnet"],
+        )
+    )
+
+# Search
+res = await client.search_by_text(
+    message=TextRequest(
+        request_id=1,
+        text="ancient country",
+        source="manual",
+        tags=["manual"],
+        model="mpnet"
+    )
+)
+```
 > Protobuf definitions are located in `src/python_rag/proto/` and compiled automatically.
 
 ---
@@ -135,15 +161,15 @@ Prometheus metrics are exposed for:
 
 ---
 
-## 🧪 Testing
+## 🧱 Scalability Roadmap
+ - Kubernetes manifests (Helm chart in progress)
 
-To test functionality manually or via CI:
+ - FastAPI wrapper for browser clients and generation fusion
 
-```bash
-pytest
-```
+ - pytest tests
 
-Or use a gRPC client like `grpcurl` or `grpcui`.
+ - Auth layer for multi-tenant deployments
+
 
 ---
 
