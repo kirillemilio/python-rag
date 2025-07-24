@@ -12,7 +12,7 @@ from ..transforms import get_transform_sequence
 from ..triton_model import BaseTritonModel
 
 
-@TritonModelFactory.register_model(model_type="classifier", arch_type="classifier")
+@TritonModelFactory.register_model(model_type='classifier', arch_type='classifier')
 class ClassifierTritonModel(BaseTritonModel[NDArray[np.float32], Dict[str, NDArray[np.float32]]]):
     """
     A specialized Triton model class for image classification tasks.
@@ -47,7 +47,7 @@ class ClassifierTritonModel(BaseTritonModel[NDArray[np.float32], Dict[str, NDArr
         outputs: List[str],
         client_timeout: float | None,
         outputs_map: Optional[Dict[str, str]] = None,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -96,7 +96,7 @@ class ClassifierTritonModel(BaseTritonModel[NDArray[np.float32], Dict[str, NDArr
             model_name=model_name,
             inputs={input_name: (3, input_size.h, input_size.w)},
             outputs=outputs,
-            datatype="FP32",
+            datatype='FP32',
             cushm_inputs=[input_name] if use_cushm else [],
             client_timeout=client_timeout,
             model_version=model_version,
@@ -134,7 +134,7 @@ class ClassifierTritonModel(BaseTritonModel[NDArray[np.float32], Dict[str, NDArr
             size=self.input_size,
             mean=(0.0, 0.0, 0.0),
             std=(1.0, 1.0, 1.0),
-            crop_mode="center",
+            crop_mode='center',
         )
 
     def preprocess(self, inputs: List[NDArray[np.float32]]) -> Dict[str, NDArray[np.float32]]:

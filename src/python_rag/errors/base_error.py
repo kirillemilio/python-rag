@@ -18,6 +18,6 @@ class BaseError(Exception):
 
     _pr_error_counter: ClassVar[MetricsHolder[Counter]] = MetricsHolder.get_default_counter()
 
-    def __init__(self, subsystem: str, method: str, message: str = ""):
+    def __init__(self, subsystem: str, method: str, message: str = ''):
         self._pr_error_counter.with_method(subsystem=subsystem, method=method).inc()
         super().__init__(message)

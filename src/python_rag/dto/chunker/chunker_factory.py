@@ -8,7 +8,7 @@ from ...config.chunker import BaseChunkerConfig
 from .base_chunker import BaseChunker
 from .chunker_interface import IChunker
 
-T = TypeVar("T", bound=BaseChunker)
+T = TypeVar('T', bound=BaseChunker)
 
 
 class ChunkerFactory:
@@ -25,11 +25,8 @@ class ChunkerFactory:
         """Register chunker class with ginve name and config class."""
 
         def _decorator(chunker_cls: Type[T]) -> Type[T]:
-
             if chunker_type in cls._chunkers:
-                raise RuntimeError(
-                    f"Chunker with type `{chunker_type}` is already reigstered"
-                )
+                raise RuntimeError(f'Chunker with type `{chunker_type}` is already reigstered')
 
             cls._chunkers[chunker_type] = chunker_cls
             cls._configs[chunker_type] = config_cls
@@ -75,7 +72,7 @@ class ChunkerFactory:
             Corresponding config class.
         """
         if chunker_type not in cls._configs:
-            raise ValueError(f"Unknown chunker type: `{chunker_type}`")
+            raise ValueError(f'Unknown chunker type: `{chunker_type}`')
         return cls._configs[chunker_type]
 
     @classmethod
@@ -93,7 +90,7 @@ class ChunkerFactory:
             Corresponding chunker class.
         """
         if chunker_type not in cls._chunkers:
-            raise ValueError(f"Unknown chunker type: `{chunker_type}`")
+            raise ValueError(f'Unknown chunker type: `{chunker_type}`')
         return cls._chunkers[chunker_type]
 
     @classmethod
@@ -116,9 +113,9 @@ class ChunkerFactory:
             config_cls = cls._configs[base_config.chunker_type]
             _ = config_cls.model_validate(config_dict)
         except Exception as e:
-            raise ValueError("Invalid chunker config") from e
+            raise ValueError('Invalid chunker config') from e
         if base_config.chunker_type not in cls._chunkers:
-            raise ValueError(f"Uknown chunker type: `{base_config.chunker_type}`")
+            raise ValueError(f'Uknown chunker type: `{base_config.chunker_type}`')
         chunker_cls = cls._chunkers[base_config.chunker_type]
         return chunker_cls.from_config(config_dict=config_dict)
 

@@ -6,7 +6,7 @@ from typing import Generic, Literal, TypeVar
 
 from ..dto.document import IChunk
 
-T = TypeVar("T", bound=IChunk)
+T = TypeVar('T', bound=IChunk)
 
 
 class ScoredChunk(Generic[T]):
@@ -22,19 +22,19 @@ class ScoredChunk(Generic[T]):
 
     score: float
     chunk: T
-    distance: Literal["euclidean", "cosine", "dot"]
+    distance: Literal['euclidean', 'cosine', 'dot']
 
     def __init__(
         self,
         chunk: T,
         score: float,
-        distance: Literal["euclidean", "cosine", "dot"],
+        distance: Literal['euclidean', 'cosine', 'dot'],
     ) -> None:
         self.chunk = chunk
         self.score = score
         self.distance = distance
 
-    def get_distance(self) -> Literal["euclidean", "cosine", "dot"]:
+    def get_distance(self) -> Literal['euclidean', 'cosine', 'dot']:
         """Get distance method.
 
         Returns

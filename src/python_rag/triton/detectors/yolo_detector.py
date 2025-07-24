@@ -10,7 +10,7 @@ from .detector import DetectorInputDict, DetectorTritonModel
 from .utils import letterbox, scale_coords
 
 
-@TritonModelFactory.register_model(model_type="detector", arch_type="yolov5")
+@TritonModelFactory.register_model(model_type='detector', arch_type='yolov5')
 class YoloV5TritonModel(DetectorTritonModel):
     """
     A Triton model subclass for YOLOv5 object detection which adapts the general detector model.
@@ -47,15 +47,15 @@ class YoloV5TritonModel(DetectorTritonModel):
         conf_thresholds = []
         for input_dict in inputs:
             preproc_input, _, _ = letterbox(
-                input_dict["image"], new_shape=(self.input_size.h, self.input_size.w), auto=False
+                input_dict['image'], new_shape=(self.input_size.h, self.input_size.w), auto=False
             )
             preproc_input = preproc_input.transpose(2, 0, 1)
             preproc_input = np.ascontiguousarray(preproc_input).astype(np.float32)
             preproc_input /= 255.0
             preproc_input = np.expand_dims(preproc_input, axis=0)
             images.append(preproc_input)
-            iou_thresholds.append(np.array([[input_dict["iou_threshold"]]], dtype=np.float32))
-            conf_thresholds.append(np.array([[input_dict["conf_threshold"]]], dtype=np.float32))
+            iou_thresholds.append(np.array([[input_dict['iou_threshold']]], dtype=np.float32))
+            conf_thresholds.append(np.array([[input_dict['conf_threshold']]], dtype=np.float32))
 
         return {
             self.input_name: np.concatenate(images, axis=0),
@@ -95,7 +95,7 @@ class YoloV5TritonModel(DetectorTritonModel):
         return output
 
 
-@TritonModelFactory.register_model(model_type="detector", arch_type="yolov7")
+@TritonModelFactory.register_model(model_type='detector', arch_type='yolov7')
 class YoloV7TritonModel(YoloV5TritonModel):
     """A specific implementation of YoloV5TritonModel for YOLOv7.
 

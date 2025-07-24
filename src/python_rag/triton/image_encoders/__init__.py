@@ -3,4 +3,4 @@
 from .base_image_encoder import BaseImageEncoderTritonModel
 from .openclip_image_encoder import OpenCLIPImageEncoderTritonModel
 
-__all__ = ["BaseImageEncoderTritonModel", "OpenCLIPImageEncoderTritonModel"]
+__all__ = ['BaseImageEncoderTritonModel', 'OpenCLIPImageEncoderTritonModel']

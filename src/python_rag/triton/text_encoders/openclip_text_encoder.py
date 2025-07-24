@@ -8,7 +8,7 @@ from ..models_factory import TritonModelFactory
 from .base_text_encoder import BaseTextEncoderTritonModel
 
 
-@TritonModelFactory.register_model(model_type="text-encoder", arch_type="clip-text")
+@TritonModelFactory.register_model(model_type='text-encoder', arch_type='clip-text')
 class OpenCLIPTextEncoderTritonModel(BaseTextEncoderTritonModel):
     """
     Implement a text encoder for OpenCLIP models from the LAION family.
@@ -32,4 +32,4 @@ class OpenCLIPTextEncoderTritonModel(BaseTextEncoderTritonModel):
         AutoTokenizer
             Tokenizer for 'laion/CLIP-ViT-H-14-laion2B-s32B-b79K'.
         """
-        return AutoTokenizer.from_pretrained("laion/CLIP-ViT-H-14-laion2B-s32B-b79K")
+        return AutoTokenizer.from_pretrained('laion/CLIP-ViT-H-14-laion2B-s32B-b79K')

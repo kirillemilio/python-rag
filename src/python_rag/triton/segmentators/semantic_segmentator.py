@@ -317,7 +317,7 @@ class SemanticSegmentationResult:
             else:
                 fixed_raw_polygons.append(contour)
         polygons = [Polygon.from_numpy(c.reshape(-1, 2)) for c in fixed_raw_polygons]
-        polygons = sorted(polygons, key=methodcaller("get_area"), reverse=True)
+        polygons = sorted(polygons, key=methodcaller('get_area'), reverse=True)
         if top_k is not None:
             polygons = polygons[:top_k]
 
@@ -329,7 +329,7 @@ class SemanticSegmentationResult:
         ]
 
 
-@TritonModelFactory.register_model(model_type="semantic-segmentator", arch_type="unet")
+@TritonModelFactory.register_model(model_type='semantic-segmentator', arch_type='unet')
 class SemanticSegmentatorTritonModel(
     BaseTritonModel[NDArray[np.float32], SemanticSegmentationResult]
 ):
@@ -364,7 +364,7 @@ class SemanticSegmentatorTritonModel(
     output_name: str
     labels: List[str]
 
-    preprocess_mode: Literal["color", "grey"]
+    preprocess_mode: Literal['color', 'grey']
 
     mean: NDArray[np.float32]
     std: NDArray[np.float32]
@@ -379,7 +379,7 @@ class SemanticSegmentatorTritonModel(
         output_name: str,
         input_size: Size,
         labels: List[str],
-        preprocess_mode: Literal["grey", "color"],
+        preprocess_mode: Literal['grey', 'color'],
         mean: NDArray[np.float32],
         std: NDArray[np.float32],
         client_timeout: float | None,
@@ -392,7 +392,7 @@ class SemanticSegmentatorTritonModel(
             model_name=model_name,
             inputs={input_name: (3, input_size.h, input_size.w)},
             outputs=[output_name],
-            datatype="FP32",
+            datatype='FP32',
             client_timeout=client_timeout,
             device_id=device_id,
             use_cushm=use_cushm,
@@ -475,7 +475,7 @@ class SemanticSegmentatorTritonModel(
         for image in inputs:
             preprocessed_image = (
                 self._preprocess_one_image_color(image)
-                if self.preprocess_mode == "color"
+                if self.preprocess_mode == 'color'
                 else self._preprocess_one_image_grey(image)
             )
             preprocessed_images.append(preprocessed_image)
@@ -509,7 +509,7 @@ class SemanticSegmentatorTritonModel(
                 res.append(
                     SemanticSegmentationResult(
                         soft_mask=mask,
-                        labels=["background", *self.labels],
+                        labels=['background', *self.labels],
                         dst_size=size,
                     )
                 )

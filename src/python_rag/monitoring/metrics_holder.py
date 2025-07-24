@@ -10,10 +10,10 @@ from prometheus_client.metrics import MetricWrapperBase
 
 from ..config import EnvSettings
 
-LOGGER = logging.getLogger("python-rag")
+LOGGER = logging.getLogger('python-rag')
 
 
-T = TypeVar("T", bound=MetricWrapperBase)
+T = TypeVar('T', bound=MetricWrapperBase)
 
 
 class MetricsHolder(Generic[T]):
@@ -92,14 +92,14 @@ class MetricsHolder(Generic[T]):
         MetricsHolder[Histogram]
             A holder for the histogram metric.
         """
-        if "rag_hist" not in cls._hists:
+        if 'rag_hist' not in cls._hists:
             hist = Histogram(
-                name="rag_hist",
-                labelnames=["env", "service", "subsystem", "method"],
-                documentation="python rag histogram",
+                name='rag_hist',
+                labelnames=['env', 'service', 'subsystem', 'method'],
+                documentation='python rag histogram',
             )
-            cls._hists["rag_hist"] = hist
-        return MetricsHolder(cls._hists["rag_hist"], env=env, service=service)
+            cls._hists['rag_hist'] = hist
+        return MetricsHolder(cls._hists['rag_hist'], env=env, service=service)
 
     @classmethod
     def get_summary(cls, env: str, service: str) -> MetricsHolder[Summary]:
@@ -117,14 +117,14 @@ class MetricsHolder(Generic[T]):
         MetricsHolder[Summary]
             A holder for the summary metric.
         """
-        if "rag_summary" not in cls._summaries:
+        if 'rag_summary' not in cls._summaries:
             summary = Summary(
-                name="rag_sum",
-                labelnames=["env", "service", "subsystem", "method"],
-                documentation="python rag summary",
+                name='rag_sum',
+                labelnames=['env', 'service', 'subsystem', 'method'],
+                documentation='python rag summary',
             )
-            cls._summaries["rag_summary"] = summary
-        return MetricsHolder(cls._summaries["rag_summary"], env=env, service=service)
+            cls._summaries['rag_summary'] = summary
+        return MetricsHolder(cls._summaries['rag_summary'], env=env, service=service)
 
     @classmethod
     def get_counter(cls, env: str, service: str) -> MetricsHolder[Counter]:
@@ -142,14 +142,14 @@ class MetricsHolder(Generic[T]):
         MetricsHolder[Counter]
             A holder for the counter metric.
         """
-        if "rag_counter" not in cls._counters:
+        if 'rag_counter' not in cls._counters:
             counter = Counter(
-                name="rag_counter",
-                labelnames=["env", "service", "subsystem", "method"],
-                documentation="python rag counter",
+                name='rag_counter',
+                labelnames=['env', 'service', 'subsystem', 'method'],
+                documentation='python rag counter',
             )
-            cls._counters["rag_counter"] = counter
-        return MetricsHolder(cls._counters["rag_counter"], env=env, service=service)
+            cls._counters['rag_counter'] = counter
+        return MetricsHolder(cls._counters['rag_counter'], env=env, service=service)
 
     @classmethod
     def get_gauge(cls, env: str, service: str) -> MetricsHolder[Gauge]:
@@ -167,14 +167,14 @@ class MetricsHolder(Generic[T]):
         MetricsHolder[Gauge]
             A holder for the gauge metric.
         """
-        if "rag_gauge" not in cls._gauges:
+        if 'rag_gauge' not in cls._gauges:
             gauge = Gauge(
-                name="rag_gauge",
-                labelnames=["env", "service", "subsystem", "method"],
-                documentation="python rag gauge",
+                name='rag_gauge',
+                labelnames=['env', 'service', 'subsystem', 'method'],
+                documentation='python rag gauge',
             )
-            cls._gauges["rag_gauge"] = gauge
-        return MetricsHolder(cls._gauges["rag_gauge"], env=env, service=service)
+            cls._gauges['rag_gauge'] = gauge
+        return MetricsHolder(cls._gauges['rag_gauge'], env=env, service=service)
 
     @classmethod
     def get_default_hist(cls) -> MetricsHolder[Histogram]:

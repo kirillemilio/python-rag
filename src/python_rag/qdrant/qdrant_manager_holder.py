@@ -34,9 +34,7 @@ class QdrantManagerHodler:
         collection_configs : dict[str, QdrantCollectionConfig]
             Dictionary of collection configurations keyed by collection name.
         """
-        cls.manager = QdrantManager(
-            config=qdrant_config, collection_configs=collection_configs
-        )
+        cls.manager = QdrantManager(config=qdrant_config, collection_configs=collection_configs)
         await cls.manager.init()
 
     @classmethod
@@ -49,5 +47,5 @@ class QdrantManagerHodler:
             initializer qdrant manager instance.
         """
         if cls.manager is None:
-            raise RuntimeError("Qdrant manager must be initialized")
+            raise RuntimeError('Qdrant manager must be initialized')
         return cls.manager

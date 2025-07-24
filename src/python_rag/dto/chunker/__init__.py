@@ -8,10 +8,10 @@ from .recursive_chunker import RecursiveCharChunker
 from .token_chunker import TokenChunker
 
 __all__ = [
-    "IChunker",
-    "BaseChunker",
-    "CharChunker",
-    "TokenChunker",
-    "RecursiveCharChunker",
-    "ChunkerFactory",
+    'IChunker',
+    'BaseChunker',
+    'CharChunker',
+    'TokenChunker',
+    'RecursiveCharChunker',
+    'ChunkerFactory',
 ]

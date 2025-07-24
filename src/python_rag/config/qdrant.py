@@ -42,14 +42,14 @@ class QdrantCollectionConfig(BaseModel):
         no compression will be applied.
     """
 
-    name: str = Field(..., description="Collection name")
-    vector_size: int = Field(..., description="Embedding dimensionality")
-    distance: Literal["cosine", "euclidean", "dot"] = Field(default="cosine")
+    name: str = Field(..., description='Collection name')
+    vector_size: int = Field(..., description='Embedding dimensionality')
+    distance: Literal['cosine', 'euclidean', 'dot'] = Field(default='cosine')
     hnsw_m: int = Field(default=16)
     ef_construct: int = Field(default=100)
     on_disk: bool = Field(default=True)
     full_scan_threshold: int = 10_000
-    compression: Literal["x4", "x8", "x16", "x32", "x64"] | None = None
+    compression: Literal['x4', 'x8', 'x16', 'x32', 'x64'] | None = None
 
     def get_distance_enum(self) -> Distance:
         """
@@ -61,9 +61,9 @@ class QdrantCollectionConfig(BaseModel):
             Enum value compatible with Qdrant API.
         """
         return {
-            "cosine": Distance.COSINE,
-            "euclidean": Distance.EUCLID,
-            "dot": Distance.DOT,
+            'cosine': Distance.COSINE,
+            'euclidean': Distance.EUCLID,
+            'dot': Distance.DOT,
         }[self.distance]
 
 
@@ -103,7 +103,7 @@ class QdrantConfig(BaseModel):
         Defaults to False.
     """
 
-    host: str = Field(default="localhost")
+    host: str = Field(default='localhost')
     use_grpc: bool = Field(default=False)
     use_secure: bool = Field(default=True)
     http_port: int = Field(default=6333)
@@ -124,6 +124,6 @@ class QdrantConfig(BaseModel):
         str
             Full connection string (e.g., http://host:port or grpc://host:port)
         """
-        scheme = "grpc" if self.use_grpc else "http"
+        scheme = 'grpc' if self.use_grpc else 'http'
         port = self.grpc_port if self.use_grpc else self.http_port
-        return f"{scheme}://{self.host}:{port}"
+        return f'{scheme}://{self.host}:{port}'

@@ -9,7 +9,7 @@ from tabulate import tabulate  # type: ignore
 from .models_factory import TritonModelFactory
 from .triton_model import BaseTritonModel
 
-T = TypeVar("T", bound=BaseTritonModel)
+T = TypeVar('T', bound=BaseTritonModel)
 
 
 class TritonModelsPool:
@@ -53,7 +53,7 @@ class TritonModelsPool:
                 },
                 # Additional models...
         ])
-    >>> triton_config = TritonConfig(host="0.0.0.0", port=8001, client_timeout=1)
+    >>> triton_config = TritonConfig(host='0.0.0.0', port=8001, client_timeout=1)
     >>> model_factory = TritonModelFactory(triton_config)
     >>> models_pool = TritonModelsPool.from_config(models_configs, model_factory=model_factory)
     >>> print(models_pool.get_validation_report())
@@ -134,14 +134,14 @@ class TritonModelsPool:
         if model_name not in self.models:
             available_models = list(self.models.keys())
             raise KeyError(
-                f"Model with name `{model_name}` not found in pool. "
-                f"Available models are: {available_models}"
+                f'Model with name `{model_name}` not found in pool. '
+                f'Available models are: {available_models}'
             )
         model = self.models[model_name]
         if not isinstance(model, model_type):
             raise TypeError(
-                f"Model with name `{model_name}` has type `{type(model).__name__}` "
-                f"which is different from target type `{model_type.__name__}`."
+                f'Model with name `{model_name}` has type `{type(model).__name__}` '
+                f'which is different from target type `{model_type.__name__}`.'
             )
 
         return model
@@ -157,7 +157,7 @@ class TritonModelsPool:
         report = []
         for model_name, model in self.models.items():
             status, message = model.validate_model()
-            report.append({"model_name": model_name, "status": status.name, "message": message})
+            report.append({'model_name': model_name, 'status': status.name, 'message': message})
         return report
 
     def show_report(self) -> str:
@@ -170,23 +170,23 @@ class TritonModelsPool:
         """
         report = self.get_validation_report()
 
-        green = "\033[92m"  # Green text
-        red = "\033[91m"  # Red text
-        reset = "\033[0m"  # Reset to default terminal color
+        green = '\033[92m'  # Green text
+        red = '\033[91m'  # Red text
+        reset = '\033[0m'  # Reset to default terminal color
 
         colored_data = []
         for row in report:
             colored_row = row.copy()
-            status = colored_row["status"]
-            if status == "SUCCESS":
-                colored_row["status"] = f"{green}✔{reset}"
+            status = colored_row['status']
+            if status == 'SUCCESS':
+                colored_row['status'] = f'{green}✔{reset}'
             else:
-                colored_row["status"] = f"{red}✖{reset}"
-            colored_row["message"] = row["message"]
+                colored_row['status'] = f'{red}✖{reset}'
+            colored_row['message'] = row['message']
             colored_data.append(colored_row)
 
-        headers = {"model_name": "Model Name", "status": "Status", "message": "Message"}
-        table = tabulate(colored_data, headers, tablefmt="fancy_grid")
+        headers = {'model_name': 'Model Name', 'status': 'Status', 'message': 'Message'}
+        table = tabulate(colored_data, headers, tablefmt='fancy_grid')
         return table
 
     def cleanup(self) -> None:

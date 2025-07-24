@@ -12,7 +12,7 @@ from ..models_factory import TritonModelFactory
 from .text_recognizer import TextRecognizerTritonModel
 
 
-@TritonModelFactory.register_model(model_type="text-recognizer", arch_type="lprnet")
+@TritonModelFactory.register_model(model_type='text-recognizer', arch_type='lprnet')
 class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
     """Triton model for license plate recognition using LPRNet.
 
@@ -26,29 +26,29 @@ class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
     """
 
     chars: ClassVar[List[str]] = [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "А",
-        "В",
-        "С",
-        "Е",
-        "Н",
-        "К",
-        "М",
-        "О",
-        "Р",
-        "Т",
-        "Х",
-        "У",
-        "-",
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        'А',
+        'В',
+        'С',
+        'Е',
+        'Н',
+        'К',
+        'М',
+        'О',
+        'Р',
+        'Т',
+        'Х',
+        'У',
+        '-',
     ]
 
     def __init__(
@@ -59,7 +59,7 @@ class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
         output_name: str,
         client_timeout: int,
         input_size: Size = Size(h=50, w=100),
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -124,7 +124,7 @@ class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
         image = cv2.resize(
             image, (self.input_size.w, self.input_size.h), interpolation=cv2.INTER_CUBIC
         )
-        image = image.astype("float32")
+        image = image.astype('float32')
         image -= 127.5
         image *= 0.0078125
         image = np.transpose(image, (2, 0, 1))
@@ -152,7 +152,7 @@ class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
         return {self.input_name: np.concatenate(preprocessed_images_list, axis=0)}
 
     def _indices_to_label(self, indices: NDArray[np.int_]) -> str:
-        pre_c, no_repeat_blank_label = "", []
+        pre_c, no_repeat_blank_label = '', []
         for c in indices:  # dropout repeated label and blank label
             if (pre_c == c) or (c == len(self.chars) - 1):
                 if c == len(self.chars) - 1:
@@ -162,7 +162,7 @@ class LPRNetTextRecognizerTritonModel(TextRecognizerTritonModel):
             pre_c = c
         # Add filtering by regexpr
         # re.findall(r"[А-Я]{1}\d{3}[А-Я]{2}\d{2,3}", final_label)
-        return "".join([self.chars[l] for l in no_repeat_blank_label])
+        return ''.join([self.chars[l] for l in no_repeat_blank_label])
 
     def _post_process_one(self, preds: NDArray[np.float32]) -> str:
         """Postprocess one image prediction and get licence plate text.

@@ -11,7 +11,7 @@ from ..models_factory import TritonModelFactory
 from .base_encoder import BaseEncoderTritonModel, ImageWithBoxes
 
 
-@TritonModelFactory.register_model(model_type="roialign-encoder", arch_type="roialign-encoder")
+@TritonModelFactory.register_model(model_type='roialign-encoder', arch_type='roialign-encoder')
 class RoiAlignEncoderTritonModel(BaseEncoderTritonModel):
     """
     Implement a Triton model encoder using ROI (Region of Interest) alignment.
@@ -81,7 +81,7 @@ class RoiAlignEncoderTritonModel(BaseEncoderTritonModel):
         output_name: str,
         client_timeout: float | None,
         embedding_size: int,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -124,7 +124,7 @@ class RoiAlignEncoderTritonModel(BaseEncoderTritonModel):
             },
             outputs=[output_name],
             cushm_inputs=[image_input_name] if use_cushm else [],
-            datatype="FP32",
+            datatype='FP32',
             client_timeout=client_timeout,
             model_version=model_version,
             embedding_size=embedding_size,
@@ -179,9 +179,9 @@ class RoiAlignEncoderTritonModel(BaseEncoderTritonModel):
         self.split_indices.clear()
         images, bboxes = [], []
         for i, img_with_box in enumerate(inputs):
-            images.append(self.preprocess_image(img_with_box["image"], i))
-            bboxes.append(self.preprocess_bbox(img_with_box["boxes"], i))
-            self.split_indices.append(img_with_box["boxes"].shape[0])
+            images.append(self.preprocess_image(img_with_box['image'], i))
+            bboxes.append(self.preprocess_bbox(img_with_box['boxes'], i))
+            self.split_indices.append(img_with_box['boxes'].shape[0])
 
         return {
             self.image_input_name: np.stack(images, axis=0),
@@ -246,13 +246,13 @@ class RoiAlignEncoderTritonModel(BaseEncoderTritonModel):
 
         np.clip(features, a_min=-1e20, a_max=1e20, out=features)
         if np.any(np.isnan(features)):
-            raise ValueError(f"Some features from osnet are nan: {features}")
+            raise ValueError(f'Some features from osnet are nan: {features}')
         if np.linalg.norm(features) == np.nan:
-            raise ValueError(f"Features from osnet has nan norm: {features}")
+            raise ValueError(f'Features from osnet has nan norm: {features}')
         if np.linalg.norm(features) == 0.0:
-            raise ValueError(f"Features from osnet has 0.0 norm: {features}")
+            raise ValueError(f'Features from osnet has 0.0 norm: {features}')
         if np.linalg.norm(features) == np.inf:
-            raise ValueError(f"Features from osnet has inf norm: {features}")
+            raise ValueError(f'Features from osnet has inf norm: {features}')
         res = np.split(features, self.split_indices, axis=0)
         self.split_indices.clear()
         return res

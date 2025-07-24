@@ -94,9 +94,7 @@ class BaseHandler(IHandler):
                         chunk=chunk_with_embedding,
                     )
                 except Exception:
-                    logger.error(
-                        "Error happened when adding chunk to collection", exc_info=True
-                    )
+                    logger.error('Error happened when adding chunk to collection', exc_info=True)
                     exc_happened = True
         return not exc_happened
 

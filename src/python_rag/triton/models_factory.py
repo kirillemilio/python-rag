@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from .triton_model import BaseTritonModel
 
 
-T = TypeVar("T", bound="BaseTritonModel")
+T = TypeVar('T', bound='BaseTritonModel')
 
 
 class TritonModelFactoryValidator(type):
@@ -57,21 +57,21 @@ class TritonModelFactoryValidator(type):
         """Add validaiton for factory class create methods."""
         found_models_types = set()
         for key, value in attrs.items():
-            if key.startswith("create_") and key != "create_model" and callable(value):
-                found_models_types.add(key.replace("create_", "").lower())
+            if key.startswith('create_') and key != 'create_model' and callable(value):
+                found_models_types.add(key.replace('create_', '').lower())
                 signature = inspect.signature(value)
                 params = signature.parameters
-                if len(params) != 2 or "config_dict" not in params:
+                if len(params) != 2 or 'config_dict' not in params:
                     raise TypeError(
-                        f"{key} as builder method must have exactly "
+                        f'{key} as builder method must have exactly '
                         + "two params: self and 'config_dict'. "
-                        + f" Current implementation requires: {params}"
+                        + f' Current implementation requires: {params}'
                     )
-                config_param = params["config_dict"]
+                config_param = params['config_dict']
                 if config_param.annotation is config_param.empty:
                     raise TypeError(
-                        f"{key} parameter `config_dict` has empty annotation."
-                        + f" Must be of subtype of {BaseModelConfig}"
+                        f'{key} parameter `config_dict` has empty annotation.'
+                        + f' Must be of subtype of {BaseModelConfig}'
                     )
         instance = super(TritonModelFactoryValidator, mtcls).__new__(mtcls, name, bases, attrs)
         return instance
@@ -107,7 +107,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         """
         self.triton_config = triton_config
         self.client = grpcclient.InferenceServerClient(
-            f"{self.triton_config.host}:{self.triton_config.port}",
+            f'{self.triton_config.host}:{self.triton_config.port}',
             verbose=triton_config.verbose,
             ssl=triton_config.ssl,
             root_certificates=triton_config.root_certificates,
@@ -145,7 +145,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         TritonModelFactory
             triton models factory.
         """
-        host, port = url.split(":")
+        host, port = url.split(':')
         return cls(triton_config=TritonConfig(host=host, port=int(port)))
 
     def get_client(self) -> grpcclient.InferenceServerClient:
@@ -162,16 +162,16 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
     def register_model(
         cls,
         model_type: Literal[
-            "detector",
-            "classifier",
-            "text-encoder",
-            "image-encoder",
-            "crop-encoder",
-            "roialign-encoder",
-            "points-detector",
-            "text-recognizer",
-            "semantic-segmentator",
-            "instance-segmentator",
+            'detector',
+            'classifier',
+            'text-encoder',
+            'image-encoder',
+            'crop-encoder',
+            'roialign-encoder',
+            'points-detector',
+            'text-recognizer',
+            'semantic-segmentator',
+            'instance-segmentator',
         ],
         arch_type: Optional[str] = None,
     ) -> Callable[[Type[T]], Type[T]]:
@@ -197,7 +197,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         def wrapper(model_cls: Type[T]) -> Type[T]:
             nonlocal arch_type
             arch_type = model_cls.__name__.lower() if arch_type is None else arch_type
-            model_key = f"{model_type}${arch_type}"
+            model_key = f'{model_type}${arch_type}'
             if model_key in cls._models:
                 raise ValueError(
                     f"Model architecture '{arch_type}' is already"
@@ -217,7 +217,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         str
             get triton url.
         """
-        return f"{self.triton_config.host}:{self.triton_config.port}"
+        return f'{self.triton_config.host}:{self.triton_config.port}'
 
     def create_model(self, config_dict: Dict[str, Any], validate: bool = False) -> BaseTritonModel:
         """Create model from registry of arbitrary type.
@@ -237,12 +237,12 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
             model.
         """
         config = BaseModelConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
             raise ValueError(
                 f"Model type '{config.arch_type}' not registered under '{config.model_type}'"
             )
-        create_method_name = f"create_{config.model_type}".replace("-", "_")
+        create_method_name = f'create_{config.model_type}'.replace('-', '_')
         create_method = getattr(self, create_method_name, None)
         if create_method is None:
             raise ValueError(
@@ -287,9 +287,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .classifiers import ClassifierTritonModel
 
         config = ClassifierConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Classifier type with name `{config.arch_type}` not found")
+            raise ValueError(f'Classifier type with name `{config.arch_type}` not found')
         builder_cls: Type[ClassifierTritonModel] = cast(
             Type[ClassifierTritonModel], self._models[model_key]
         )
@@ -340,9 +340,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .detectors import DetectorTritonModel
 
         config = DetectorConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Detector type with name `{config.arch_type}` not found")
+            raise ValueError(f'Detector type with name `{config.arch_type}` not found')
         builder_cls: Type[DetectorTritonModel] = cast(
             Type[DetectorTritonModel], self._models[model_key]
         )
@@ -359,10 +359,10 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
             output_name=config.output_name,
             client_timeout=client_timeout,
             compression_algorithm=config.compression_algorithm,
-            conf_threshold_name=config.conf_threshold["name"],
-            conf_threshold_default=config.conf_threshold["default"],
-            iou_threshold_name=config.iou_threshold["name"],
-            iou_threshold_default=config.conf_threshold["default"],
+            conf_threshold_name=config.conf_threshold['name'],
+            conf_threshold_default=config.conf_threshold['default'],
+            iou_threshold_name=config.iou_threshold['name'],
+            iou_threshold_default=config.conf_threshold['default'],
             model_version=config.version,
             use_cushm=config.use_cushm,
             device_id=config.device_id,
@@ -398,9 +398,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .text_recognizers import TextRecognizerTritonModel
 
         config = TextRecognizerConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"TextRecongnizesr type with name `{config.arch_type}` not found")
+            raise ValueError(f'TextRecongnizesr type with name `{config.arch_type}` not found')
         builder_cls: Type[TextRecognizerTritonModel] = cast(
             Type[TextRecognizerTritonModel], self._models[model_key]
         )
@@ -451,9 +451,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .points_detectors import PointsDetectorTritonModel
 
         config = PointsDetectorConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Points detector type with name `{config.arch_type}` not found")
+            raise ValueError(f'Points detector type with name `{config.arch_type}` not found')
         builder_cls: Type[PointsDetectorTritonModel] = cast(
             Type[PointsDetectorTritonModel],
             self._models[model_key],
@@ -511,9 +511,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .text_encoders import BaseTextEncoderTritonModel
 
         config = TextEncoderConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Text encoder type with name `{config.arch_type} not found")
+            raise ValueError(f'Text encoder type with name `{config.arch_type} not found')
         builder_cls: Type[BaseTextEncoderTritonModel] = cast(
             Type[BaseTextEncoderTritonModel], self._models[model_key]
         )
@@ -533,7 +533,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
             compression_algorithm=config.compression_algorithm,
             model_version=config.version,
             embedding_size=config.embedding_size,
-            datatype="FP32",
+            datatype='FP32',
         )
 
     def create_image_encoder(self, config_dict: Dict[str, Any]) -> BaseImageEncoderTritonModel:
@@ -569,9 +569,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .image_encoders import BaseImageEncoderTritonModel
 
         config = ImageEncoderConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Image encoder type with name `{config.arch_type} not found")
+            raise ValueError(f'Image encoder type with name `{config.arch_type} not found')
         builder_cls: Type[BaseImageEncoderTritonModel] = cast(
             Type[BaseImageEncoderTritonModel], self._models[model_key]
         )
@@ -591,7 +591,7 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
             compression_algorithm=config.compression_algorithm,
             model_version=config.version,
             embedding_size=config.embedding_size,
-            datatype="FP32",
+            datatype='FP32',
         )
 
     def create_crop_encoder(self, config_dict: Dict[str, Any]) -> CropEncoderTritonModel:
@@ -624,9 +624,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .encoders import CropEncoderTritonModel
 
         config = CropEncoderConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Crop encoder type with name `{config.arch_type}` not found")
+            raise ValueError(f'Crop encoder type with name `{config.arch_type}` not found')
 
         builder_cls: Type[CropEncoderTritonModel] = cast(
             Type[CropEncoderTritonModel], self._models[model_key]
@@ -679,9 +679,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .encoders import RoiAlignEncoderTritonModel
 
         config = RoiAlignEncoderConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Roi Align encoder type with name `{config.arch_type}` not found")
+            raise ValueError(f'Roi Align encoder type with name `{config.arch_type}` not found')
 
         builder_cls: Type[RoiAlignEncoderTritonModel] = cast(
             Type[RoiAlignEncoderTritonModel],
@@ -738,9 +738,9 @@ class TritonModelFactory(metaclass=TritonModelFactoryValidator):
         from .segmentators import SemanticSegmentatorTritonModel
 
         config = SemanticSegmentatorConfig.model_validate(config_dict)
-        model_key = f"{config.model_type}${config.arch_type}"
+        model_key = f'{config.model_type}${config.arch_type}'
         if model_key not in self._models:
-            raise ValueError(f"Semantic segmentator model with name `{config.arch_type}` not found")
+            raise ValueError(f'Semantic segmentator model with name `{config.arch_type}` not found')
 
         builder_cls: Type[SemanticSegmentatorTritonModel] = cast(
             Type[SemanticSegmentatorTritonModel], self._models[model_key]

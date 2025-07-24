@@ -149,7 +149,7 @@ class CudaShmMemoryManager(SimpleMemoryManager):
 
             if batch_size_mismatch and not shape_mismatch and old_cushm_batch_size < value.shape[0]:
                 logging.warning(
-                    "Resetting batch size of cudashm input can lead to performance degradation"
+                    'Resetting batch size of cudashm input can lead to performance degradation'
                 )
                 new_batch_size = value.shape[0]
                 self.set_batch_size(input_=input_, batch_size=new_batch_size)
@@ -172,8 +172,8 @@ class CudaShmMemoryManager(SimpleMemoryManager):
                 and np.prod(old_cushm_shape) < np.prod(input_shape)
             ):
                 logging.warning(
-                    "Resetting spatial size of cudashm input"
-                    + " can lead to performance degradation"
+                    'Resetting spatial size of cudashm input'
+                    + ' can lead to performance degradation'
                 )
                 self.set_full_shape(input_=input_, shape=value.shape)
                 # Unregister and delete old regions
@@ -236,7 +236,7 @@ class CudaShmMemoryManager(SimpleMemoryManager):
         return data.size * data.itemsize
 
     @classmethod
-    def _gen_region_name(cls, prefix: str = "") -> str:
+    def _gen_region_name(cls, prefix: str = '') -> str:
         """
         Generate a unique region name for CUDA shared memory.
 
@@ -293,10 +293,10 @@ class CudaShmMemoryManager(SimpleMemoryManager):
             If there is a failure in creating any of the CUDA shared memory regions.
         """
         if not set(inputs.keys()).issuperset(set(names)):
-            raise ValueError("cushm inputs must be a subset of input names")
+            raise ValueError('cushm inputs must be a subset of input names')
         with self.lock:
             for name in names:
-                region_name = self._gen_region_name(prefix=name + "_")
+                region_name = self._gen_region_name(prefix=name + '_')
                 self.cushm_regions[name] = region_name
                 try:
                     shape = inputs[name].shape()
@@ -308,11 +308,11 @@ class CudaShmMemoryManager(SimpleMemoryManager):
                     )
                     self.cushm_shapes[name] = shape
                 except Exception as e:
-                    logging.error(f"Failed to create CUDA shared memory region: {str(e)}")
+                    logging.error(f'Failed to create CUDA shared memory region: {str(e)}')
                     del self.cushm_regions[name]
                     raise TritonCudaSharedMemoryError(
                         model_name=self.model_name,
-                        message=f"Failed to create CUDA shared memory region for {name}",
+                        message=f'Failed to create CUDA shared memory region for {name}',
                     )
 
     def _cleanup_cushm_input(self, input_name: str):
@@ -334,7 +334,7 @@ class CudaShmMemoryManager(SimpleMemoryManager):
                 cudashm.destroy_shared_memory_region(region_handle)
             except Exception as e:
                 logging.error(
-                    "Failed to cleanup CUDA shared " + f"memory region '{region_name}': {str(e)}"
+                    'Failed to cleanup CUDA shared ' + f"memory region '{region_name}': {str(e)}"
                 )
             finally:
                 del self.cushm_regions[input_name]

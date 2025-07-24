@@ -10,7 +10,7 @@ from ..models_factory import TritonModelFactory
 from .crop_encoder import CropEncoderTritonModel
 
 
-@TritonModelFactory.register_model(model_type="crop-encoder", arch_type="facenet")
+@TritonModelFactory.register_model(model_type='crop-encoder', arch_type='facenet')
 class FacenetCropEncoderTritonModel(CropEncoderTritonModel):
     """
     Facenet based encoder model for facial recognition.
@@ -30,7 +30,7 @@ class FacenetCropEncoderTritonModel(CropEncoderTritonModel):
         output_name: str,
         client_timeout: float | None,
         embedding_size: int = 768,
-        model_version: str = "1",
+        model_version: str = '1',
         **kwargs,
     ):
         """Init facenet crop encoder.

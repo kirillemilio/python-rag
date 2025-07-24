@@ -11,7 +11,7 @@ def get_detections_mask_for_roi(
     contour: Polygon,
     bboxes_xyxy: NDArray[np.float32],
     intersection_threshold: float,
-    filter_method: Literal["iou", "point"],
+    filter_method: Literal['iou', 'point'],
 ) -> NDArray[np.bool_]:
     """Compute 2 polygon intersection fraction to get special metric like IoU.
 
@@ -44,9 +44,9 @@ def get_detections_mask_for_roi(
             y2=int(bboxes_xyxy[i, 4]),
         )
         cond = False
-        if filter_method == "iou":
+        if filter_method == 'iou':
             cond = (contour.get_inter(bbox) / (bbox.get_area() + 1e-12)) > intersection_threshold
-        elif filter_method == "point":
+        elif filter_method == 'point':
             cond = contour.contains(bbox.get_cxcy())
         else:
             raise NotImplementedError()

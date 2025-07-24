@@ -40,9 +40,9 @@ class CropResize:
     """Utility class for cropping and resizing images based on specified dimensions and mode."""
 
     size: Size
-    mode: Literal["center", "top", "bottom"]
+    mode: Literal['center', 'top', 'bottom']
 
-    def __init__(self, size: Size, mode: Literal["center", "top", "bottom"]):
+    def __init__(self, size: Size, mode: Literal['center', 'top', 'bottom']):
         """Initialize the CropResize object with specified size and crop mode.
 
         Parameters
@@ -57,7 +57,7 @@ class CropResize:
 
     @classmethod
     def crop(
-        cls, image: NDArray[np.float32], mode: Literal["center", "top", "bottom"]
+        cls, image: NDArray[np.float32], mode: Literal['center', 'top', 'bottom']
     ) -> NDArray[np.float32]:
         """Crop input image with given crop mode.
 
@@ -74,13 +74,13 @@ class CropResize:
         h, w = image.shape[:2]
         m = min(h, w)
         top, left = 0, 0
-        if mode == "center":
+        if mode == 'center':
             top, left = (h - m) // 2, (w - m) // 2
-        elif mode == "bottom":
+        elif mode == 'bottom':
             top, left = h - m, w - m
-        elif mode != "top":
+        elif mode != 'top':
             raise ValueError(
-                f"Invalid value for crop mode: `{mode}`."
+                f'Invalid value for crop mode: `{mode}`.'
                 + "Must be one of 'center', 'top', 'bottom"
             )
         return image[top : top + m, left : left + m]
@@ -239,7 +239,7 @@ def get_transform_sequence(
     size: Size = Size(w=224, h=224),
     mean: Tuple[float, float, float] = (0.485, 0.456, 0.406),
     std: Tuple[float, float, float] = (0.229, 0.224, 0.225),
-    crop_mode: Literal["top", "center", "bottom"] = "top",
+    crop_mode: Literal['top', 'center', 'bottom'] = 'top',
 ) -> Callable[[NDArray[np.float32]], NDArray[np.float32]]:
     """Get composed transform.
 

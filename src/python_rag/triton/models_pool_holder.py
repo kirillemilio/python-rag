@@ -54,7 +54,6 @@ class TritonModelsPoolHolder:
         """
         if cls.models_pool is None:
             raise RuntimeError(
-                "Triton models pool is not initialized. "
-                + "Consider calling `init` method first."
+                'Triton models pool is not initialized. ' + 'Consider calling `init` method first.'
             )
         return cls.models_pool

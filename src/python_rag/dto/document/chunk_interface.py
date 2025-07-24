@@ -7,7 +7,7 @@ from typing import Any, TypeVar
 
 from .document_interface import IDocument
 
-T = TypeVar("T", bound="IChunk")
+T = TypeVar('T', bound='IChunk')
 
 
 class IChunk(IDocument):
@@ -26,7 +26,7 @@ class IChunk(IDocument):
 
     @abstractmethod
     def get_point_id(self) -> int:
-        """Get unieque identifier of qdrant point.
+        """Get unique identifier of qdrant point.
 
         Returns
         -------

@@ -58,7 +58,7 @@ class BaseTextEncoderTritonModel(BaseTritonModel[str, NDArray[np.float32]]):
         embeddings_output_name: str,
         client_timeout: float | None,
         embedding_size: int,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         cushm_inputs: Optional[List[str]] = None,
         **kwargs,
@@ -95,14 +95,14 @@ class BaseTextEncoderTritonModel(BaseTritonModel[str, NDArray[np.float32]]):
         **kwargs : dict
             Additional arguments passed to the base Triton model class.
         """
-        kwargs.pop("datatype", None)
+        kwargs.pop('datatype', None)
         super().__init__(
             client=client,
             model_name=model_name,
             inputs={text_input_name: (8,), mask_input_name: (8,)},
             outputs=[hidden_output_name, embeddings_output_name],
             cushm_inputs=cushm_inputs,
-            datatype="INT64",
+            datatype='INT64',
             client_timeout=client_timeout,
             model_version=model_version,
             device_id=device_id,
@@ -146,10 +146,10 @@ class BaseTextEncoderTritonModel(BaseTritonModel[str, NDArray[np.float32]]):
         dict of str to NDArray[np.float32]
             Dictionary containing input tensors ready for inference.
         """
-        res = self.tokenizer(inputs, return_tensors="pt", padding=True)  # type: ignore
+        res = self.tokenizer(inputs, return_tensors='pt', padding=True)  # type: ignore
         return {
-            self.text_input_name: res["input_ids"].numpy().astype(np.int64),
-            self.mask_input_name: res["attention_mask"].numpy().astype(np.int64),
+            self.text_input_name: res['input_ids'].numpy().astype(np.int64),
+            self.mask_input_name: res['attention_mask'].numpy().astype(np.int64),
         }
 
     def postprocess(self, raw_outputs: Dict[str, NDArray[np.float32]]) -> List[NDArray[np.float32]]:

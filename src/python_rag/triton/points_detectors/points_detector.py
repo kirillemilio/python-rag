@@ -57,7 +57,7 @@ class PointsDetectorTritonModel(BaseTritonModel[NDArray[np.float32], PointsOutpu
         client_timeout: float | None,
         iou_threshold: float,
         conf_threshold: float,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         channels_last: bool = False,
@@ -73,7 +73,7 @@ class PointsDetectorTritonModel(BaseTritonModel[NDArray[np.float32], PointsOutpu
             model_name=model_name,
             inputs={input_name: triton_input_shape},
             outputs=[output_name],
-            datatype="FP32",
+            datatype='FP32',
             client_timeout=client_timeout,
             model_version=model_version,
             device_id=device_id,
@@ -127,7 +127,7 @@ class PointsDetectorTritonModel(BaseTritonModel[NDArray[np.float32], PointsOutpu
         self,
         image: NDArray[np.float32],
         output: PointsOutputDict,
-        crop_mode: Literal["perspective", "borders"],
+        crop_mode: Literal['perspective', 'borders'],
     ) -> List[NDArray[np.float32]]:
         """Get list of crops from image using iwpodnet points.
 

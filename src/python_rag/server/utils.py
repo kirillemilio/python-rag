@@ -11,7 +11,7 @@ from pydantic_yaml import parse_yaml_file_as
 logger = logging.getLogger(__name__)
 
 
-T = TypeVar("T", bound=BaseModel)
+T = TypeVar('T', bound=BaseModel)
 
 
 class ConfigLoader:
@@ -23,5 +23,5 @@ class ConfigLoader:
         try:
             return parse_yaml_file_as(config_class, file_path)
         except Exception as e:
-            logger.error(f"Failed to load config from {file_path}: {e}")
+            logger.error(f'Failed to load config from {file_path}: {e}')
             raise

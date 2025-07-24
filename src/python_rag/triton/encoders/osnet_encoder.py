@@ -7,7 +7,7 @@ from ..models_factory import TritonModelFactory
 from .roialign_encoder import RoiAlignEncoderTritonModel
 
 
-@TritonModelFactory.register_model(model_type="roialign-encoder", arch_type="osnet-roialign")
+@TritonModelFactory.register_model(model_type='roialign-encoder', arch_type='osnet-roialign')
 class OsnetEncoderTritonModel(RoiAlignEncoderTritonModel):
     """
     An encoder model using OSNet architecture for feature extraction from regions of interest (ROI).
@@ -26,7 +26,7 @@ class OsnetEncoderTritonModel(RoiAlignEncoderTritonModel):
         output_name: str,
         client_timeout: float | None,
         embedding_size: int = 512,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,

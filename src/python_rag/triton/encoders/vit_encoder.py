@@ -12,7 +12,7 @@ from ..models_factory import TritonModelFactory
 from .crop_encoder import CropEncoderTritonModel, ImageWithBoxes
 
 
-@TritonModelFactory.register_model(model_type="crop-encoder", arch_type="vit")
+@TritonModelFactory.register_model(model_type='crop-encoder', arch_type='vit')
 class VitCropEncoderTritonModel(CropEncoderTritonModel):
     """
     Visual Transformer (ViT) based model for extracting features from image crops.
@@ -41,7 +41,7 @@ class VitCropEncoderTritonModel(CropEncoderTritonModel):
         output_name: str,
         client_timeout: float | None,
         embedding_size: int = 768,
-        model_version: str = "1",
+        model_version: str = '1',
         mean: Tuple[float, float, float] = (0.48145466, 0.4578275, 0.40821073),
         std: Tuple[float, float, float] = (0.26862954, 0.26130258, 0.27577711),
         **kwargs,
@@ -122,7 +122,7 @@ class VitCropEncoderTritonModel(CropEncoderTritonModel):
         crops = []
         bboxes = []
         for i, img_with_box in enumerate(inputs):
-            bboxes_raw = img_with_box["boxes"]
+            bboxes_raw = img_with_box['boxes']
             for i in range(bboxes_raw.shape[0]):
                 bbox = BBox(
                     x1=bboxes_raw[i, 0],
@@ -131,7 +131,7 @@ class VitCropEncoderTritonModel(CropEncoderTritonModel):
                     y2=bboxes_raw[i, 3],
                 )
                 crop = cv2.resize(
-                    bbox.crop(img_with_box["image"]),
+                    bbox.crop(img_with_box['image']),
                     (self.input_size.w, self.input_size.h),  # type: ignore
                 )
                 crop = crop / 255.0  # type: ignore
@@ -139,7 +139,7 @@ class VitCropEncoderTritonModel(CropEncoderTritonModel):
                 crop = np.transpose(crop.astype(np.float32), (2, 0, 1))
                 crops.append(crop)
                 bboxes.append(bboxes_raw)
-            self.split_indices.append(img_with_box["boxes"].shape[0])
+            self.split_indices.append(img_with_box['boxes'].shape[0])
 
         return {
             self.image_input_name: np.stack(crops, axis=0),

@@ -164,7 +164,7 @@ def four_point_transform(
     # order
     dst = np.array(
         [[0, 0], [max_width - 1, 0], [max_width - 1, max_height - 1], [0, max_height - 1]],
-        dtype="float32",
+        dtype='float32',
     )
     # compute the perspective transform matrix and then apply it
     transform_matrix = cv2.getPerspectiveTransform(rect, dst)
@@ -211,7 +211,7 @@ class Label:
         str
             string representation of label.
         """
-        return "Class: %d, top_left(x:%f,y:%f), bottom_right(x:%f,y:%f)" % (
+        return 'Class: %d, top_left(x:%f,y:%f), bottom_right(x:%f,y:%f)' % (
             self.__cl,
             self.__tl[0],
             self.__tl[1],
@@ -382,7 +382,7 @@ class DLabel(Label):
         super().__init__(cl, tl, br, prob)
 
 
-@TritonModelFactory.register_model(model_type="points-detector", arch_type="iwpodnet")
+@TritonModelFactory.register_model(model_type='points-detector', arch_type='iwpodnet')
 class IWpodNetTritonModel(PointsDetectorTritonModel):
     """IWpodNet triton model implementation."""
 
@@ -403,7 +403,7 @@ class IWpodNetTritonModel(PointsDetectorTritonModel):
         client_timeout: float | None,
         iou_threshold: float = 0.1,
         conf_threshold: float = 0.35,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -569,8 +569,8 @@ class IWpodNetTritonModel(PointsDetectorTritonModel):
             if affine_.size == 0:
                 results.append(
                     {
-                        "points": np.zeros((0, 4, 2), dtype=np.float32),
-                        "probs": np.zeros((0,), dtype=np.float32),
+                        'points': np.zeros((0, 4, 2), dtype=np.float32),
+                        'probs': np.zeros((0,), dtype=np.float32),
                     }
                 )
                 continue
@@ -610,8 +610,8 @@ class IWpodNetTritonModel(PointsDetectorTritonModel):
             result_points_mask = self._get_valid_points_mask(result_points_numpy)
             results.append(
                 {
-                    "points": result_points_numpy[result_points_mask, ...],
-                    "probs": result_probs_numpy[result_points_mask, ...],
+                    'points': result_points_numpy[result_points_mask, ...],
+                    'probs': result_probs_numpy[result_points_mask, ...],
                 }
             )
 
@@ -624,7 +624,7 @@ class IWpodNetTritonModel(PointsDetectorTritonModel):
         self,
         image: NDArray[np.float32],
         output: PointsOutputDict,
-        crop_mode: Literal["perspective", "borders"],
+        crop_mode: Literal['perspective', 'borders'],
     ) -> List[NDArray[np.float32]]:
         """Get list of crops from image using iwpodnet points.
 
@@ -642,11 +642,11 @@ class IWpodNetTritonModel(PointsDetectorTritonModel):
         List[NDArray[np.float32]]
             list of crops from the image.
         """
-        points = output["points"]
+        points = output['points']
         num_rects = points.shape[0]
         crops = []
         for i in range(num_rects):
-            if crop_mode == "perspective":
+            if crop_mode == 'perspective':
                 crop = four_point_transform(image, points=points[i, ...])
             else:
                 crop = four_point_crop(image, points=points[i, ...])

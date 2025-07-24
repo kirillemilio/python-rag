@@ -12,7 +12,7 @@ from ..models_factory import TritonModelFactory
 from .base_encoder import BaseEncoderTritonModel, ImageWithBoxes
 
 
-@TritonModelFactory.register_model(model_type="crop-encoder", arch_type="crop-encoder")
+@TritonModelFactory.register_model(model_type='crop-encoder', arch_type='crop-encoder')
 class CropEncoderTritonModel(BaseEncoderTritonModel):
     """
     A specialized encoder model that processes image crops for encoding.
@@ -51,7 +51,7 @@ class CropEncoderTritonModel(BaseEncoderTritonModel):
         output_name: str,
         client_timeout: float | None,
         embedding_size: int,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -88,7 +88,7 @@ class CropEncoderTritonModel(BaseEncoderTritonModel):
             },
             outputs=[output_name],
             cushm_inputs=[image_input_name] if use_cushm else [],
-            datatype="FP32",
+            datatype='FP32',
             client_timeout=client_timeout,
             model_version=model_version,
             embedding_size=embedding_size,
@@ -162,7 +162,7 @@ class CropEncoderTritonModel(BaseEncoderTritonModel):
         crops = []
         bboxes = []
         for i, img_with_box in enumerate(inputs):
-            bboxes_raw = img_with_box["boxes"]
+            bboxes_raw = img_with_box['boxes']
             for k in range(bboxes_raw.shape[0]):
                 bbox = BBox(
                     x1=bboxes_raw[k, 0],
@@ -170,7 +170,7 @@ class CropEncoderTritonModel(BaseEncoderTritonModel):
                     x2=bboxes_raw[k, 2],
                     y2=bboxes_raw[k, 3],
                 )
-                crop = self.process_crop(bbox.crop(img_with_box["image"]))  # type: ignore
+                crop = self.process_crop(bbox.crop(img_with_box['image']))  # type: ignore
                 crops.append(crop)
                 bboxes.append(bboxes_raw)
             if i < len(inputs) - 1:
@@ -206,13 +206,13 @@ class CropEncoderTritonModel(BaseEncoderTritonModel):
 
         np.clip(features, a_min=-1e20, a_max=1e20, out=features)
         if np.any(np.isnan(features)):
-            raise ValueError(f"Some features from osnet are nan: {features}")
+            raise ValueError(f'Some features from osnet are nan: {features}')
         if np.linalg.norm(features) == np.nan:
-            raise ValueError(f"Features from osnet has nan norm: {features}")
+            raise ValueError(f'Features from osnet has nan norm: {features}')
         if np.linalg.norm(features) == 0.0:
-            raise ValueError(f"Features from osnet has 0.0 norm: {features}")
+            raise ValueError(f'Features from osnet has 0.0 norm: {features}')
         if np.linalg.norm(features) == np.inf:
-            raise ValueError(f"Features from osnet has inf norm: {features}")
+            raise ValueError(f'Features from osnet has inf norm: {features}')
         res = np.split(features, np.cumsum(self.split_indices), axis=0)
         self.split_indices.clear()
         return res

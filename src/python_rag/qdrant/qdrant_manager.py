@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import time
 from typing import Sequence
 
 import numpy as np
@@ -129,9 +128,7 @@ class QdrantManager:
                         on_disk=False,
                     ),
                 )
-                logger.info(
-                    f"[Qdrant] Collection '{collection_name}' created successfully."
-                )
+                logger.info(f"[Qdrant] Collection '{collection_name}' created successfully.")
             else:
                 logger.info(f"[Qdrant] Collection '{collection_name}' already exists.")
                 continue
@@ -149,9 +146,7 @@ class QdrantManager:
         chunks : Sequence[ChunkWithEmbedding]
             Metadata for each vector, must match `vectors` in length.
         """
-        logger.debug(
-            f"[Qdrant] Inserting {len(chunks)} vectors into '{collection_name}'"
-        )
+        logger.debug(f"[Qdrant] Inserting {len(chunks)} vectors into '{collection_name}'")
         points = [
             PointStruct(
                 id=chunk.get_point_id(),
@@ -162,9 +157,7 @@ class QdrantManager:
         ]
 
         await self.client.upsert(collection_name=collection_name, points=points)
-        logger.info(
-            f"[Qdrant] Successfully added {len(points)} chunks to '{collection_name}'"
-        )
+        logger.info(f"[Qdrant] Successfully added {len(points)} chunks to '{collection_name}'")
 
     async def add_chunk(self, collection_name: str, chunk: ChunkWithEmbedding) -> None:
         """Add a single chunk with embedding to collection.
@@ -210,9 +203,7 @@ class QdrantManager:
         list[ScoredPoint]
             List of scored points (chunks) sorted by relevance.
         """
-        logger.debug(
-            f"[Qdrant] Searching in collection '{collection_name}' with top_k={top_k}"
-        )
+        logger.debug(f"[Qdrant] Searching in collection '{collection_name}' with top_k={top_k}")
         distance_mode = self.collection_configs[collection_name].distance
         results = await self.client.search(
             collection_name=collection_name,
@@ -269,9 +260,7 @@ class QdrantManager:
         list[ScoredPoint]
             List of scored points (chunks) sorted by relevance.
         """
-        logger.debug(
-            f"[Qdrant] Searching in collection '{collection_name}' with top_k={top_k}"
-        )
+        logger.debug(f"[Qdrant] Searching in collection '{collection_name}' with top_k={top_k}")
         distance_mode = self.collection_configs[collection_name].distance
         results = await self.client.search(
             collection_name=collection_name,
@@ -290,7 +279,7 @@ class QdrantManager:
             chunk = ChunkWithEmbedding(
                 chunk=Chunk.model_validate(res.payload),
                 embedding=np.array(res.vector, dtype=np.float32),
-                model_name=res.payload.get("model_name", "default"),
+                model_name=res.payload.get('model_name', 'default'),
             )
             outputs.append(ScoredChunk(chunk, score=res.score, distance=distance_mode))
         return outputs
@@ -307,17 +296,13 @@ class QdrantManager:
         chunk_id : int
             Unique chunk ID to remove.
         """
-        logger.info(
-            f"[Qdrant] Removing chunk with ID {chunk_id} from '{collection_name}'"
-        )
+        logger.info(f"[Qdrant] Removing chunk with ID {chunk_id} from '{collection_name}'")
         await self.client.delete(
-            collection_name=collection_name, points_selector={"points": [chunk_id]}
+            collection_name=collection_name, points_selector={'points': [chunk_id]}
         )
-        logger.debug(f"[Qdrant] Chunk {chunk_id} removed")
+        logger.debug(f'[Qdrant] Chunk {chunk_id} removed')
 
-    async def remove_chunks_by_document_id(
-        self, collection_name: str, document_id: int
-    ) -> None:
+    async def remove_chunks_by_document_id(self, collection_name: str, document_id: int) -> None:
         """
         Remove all chunks associated with a specific document ID.
 
@@ -335,12 +320,10 @@ class QdrantManager:
         await self.client.delete(
             collection_name=collection_name,
             points_selector={
-                "filter": {
-                    "must": [{"key": "document_id", "match": {"value": document_id}}]
-                }
+                'filter': {'must': [{'key': 'document_id', 'match': {'value': document_id}}]}
             },
         )
-        logger.debug(f"[Qdrant] Chunks with document_id={document_id} removed")
+        logger.debug(f'[Qdrant] Chunks with document_id={document_id} removed')
 
     async def clear_collection(self, collection_name: str) -> None:
         """
@@ -352,7 +335,5 @@ class QdrantManager:
             Name of the collection to be cleared.
         """
         logger.warning(f"[Qdrant] Clearing all data in collection '{collection_name}'")
-        await self.client.delete(
-            collection_name=collection_name, points_selector={"all": True}
-        )
+        await self.client.delete(collection_name=collection_name, points_selector={'all': True})
         logger.info(f"[Qdrant] Collection '{collection_name}' cleared")

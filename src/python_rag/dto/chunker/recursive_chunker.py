@@ -11,9 +11,7 @@ from .base_chunker import BaseChunker
 from .chunker_factory import ChunkerFactory
 
 
-@ChunkerFactory.register_chunker(
-    chunker_type="recursive", config_cls=RecursiveCharChunkerConfig
-)
+@ChunkerFactory.register_chunker(chunker_type='recursive', config_cls=RecursiveCharChunkerConfig)
 class RecursiveCharChunker(BaseChunker):
     """LangChain RecursiveCharacterTextSplitter wrapper."""
 

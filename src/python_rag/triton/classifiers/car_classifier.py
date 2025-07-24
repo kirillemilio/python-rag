@@ -10,7 +10,7 @@ from ..transforms import get_transform_sequence
 from .classifier import ClassifierTritonModel
 
 
-@TritonModelFactory.register_model(model_type="classifier", arch_type="car")
+@TritonModelFactory.register_model(model_type='classifier', arch_type='car')
 class CarClassifierTritonModel(ClassifierTritonModel):
     """
     A specialized trition model class for car classification task.
@@ -32,5 +32,5 @@ class CarClassifierTritonModel(ClassifierTritonModel):
             size=self.input_size,
             mean=(0.485, 0.456, 0.406),
             std=(0.229, 0.224, 0.225),
-            crop_mode="bottom",
+            crop_mode='bottom',
         )

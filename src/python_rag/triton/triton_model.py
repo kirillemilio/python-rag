@@ -29,8 +29,8 @@ from .exceptions import (
 from .memory_manager import CudaShmMemoryManager, IMemoryManager, SimpleMemoryManager
 from .validation_status import EValidationStatus
 
-T = TypeVar("T")
-U = TypeVar("U")
+T = TypeVar('T')
+U = TypeVar('U')
 
 
 LOGGER = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
     device_id: int
     cushm_inputs: List[str]
     client_timeout: Optional[float]
-    compression_algorithm: Optional[Literal["deflate", "gzip"]]
+    compression_algorithm: Optional[Literal['deflate', 'gzip']]
 
     _pr_hist: MetricsHolder[Histogram]
     _pr_counter: MetricsHolder[Counter]
@@ -101,8 +101,8 @@ class BaseTritonModel(ABC, Generic[T, U]):
         outputs: List[str],
         datatype: str,
         client_timeout: Optional[float] = None,
-        compression_algorithm: Optional[Literal["deflate", "gzip"]] = None,
-        model_version: str = "1",
+        compression_algorithm: Optional[Literal['deflate', 'gzip']] = None,
+        model_version: str = '1',
         device_id: int = 0,
         cushm_inputs: Optional[List[str]] = None,
         allow_spatial_adjustment: bool = False,
@@ -124,12 +124,12 @@ class BaseTritonModel(ABC, Generic[T, U]):
 
         if len(self.cushm_inputs) > 0:
             self.memory_manager = self.create_memory_manager(
-                manager_type="cushm", allow_spatial_adjustment=allow_spatial_adjustment
+                manager_type='cushm', allow_spatial_adjustment=allow_spatial_adjustment
             )
             self._use_cushm = True
         else:
             self.memory_manager = self.create_memory_manager(
-                manager_type="simple", allow_spatial_adjustment=allow_spatial_adjustment
+                manager_type='simple', allow_spatial_adjustment=allow_spatial_adjustment
             )
             self._use_cushm = False
         self.memory_manager.init(triton_inputs=self.inputs)
@@ -188,7 +188,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
 
     def create_memory_manager(
         self,
-        manager_type: Literal["simple", "cushm"],
+        manager_type: Literal['simple', 'cushm'],
         allow_spatial_adjustment: bool = False,
     ) -> IMemoryManager:
         """
@@ -207,13 +207,13 @@ class BaseTritonModel(ABC, Generic[T, U]):
         IMemoryManager
             An instance of the memory manager.
         """
-        if manager_type == "simple":
+        if manager_type == 'simple':
             return SimpleMemoryManager(
                 client=self.client,
                 model_name=self.model_name,
                 allow_spatial_adjustment=allow_spatial_adjustment,
             )
-        elif manager_type == "cushm":
+        elif manager_type == 'cushm':
             return CudaShmMemoryManager(
                 client=self.client,
                 model_name=self.model_name,
@@ -223,9 +223,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
             )
 
     @classmethod
-    def create_outputs(
-        cls, outputs: List[str]
-    ) -> Dict[str, grpcclient.InferRequestedOutput]:
+    def create_outputs(cls, outputs: List[str]) -> Dict[str, grpcclient.InferRequestedOutput]:
         """
         Create output specifications for the Triton model.
 
@@ -263,9 +261,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
             A dictionary mapping input names to Triton input objects.
         """
         return {
-            name: grpcclient.InferInput(
-                name=name, shape=(batch_size, *size), datatype=datatype
-            )
+            name: grpcclient.InferInput(name=name, shape=(batch_size, *size), datatype=datatype)
             for name, size in inputs.items()
         }
 
@@ -317,7 +313,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
             If the input tensor's shape is not properly configured.
         """
         if input_name not in self.inputs:
-            raise KeyError(f"No input {input_name} found in inputs dict")
+            raise KeyError(f'No input {input_name} found in inputs dict')
         shape = self.inputs[input_name].shape()
         if len(shape) == 0:
             raise TritonInvalidShapeError(
@@ -379,17 +375,15 @@ class BaseTritonModel(ABC, Generic[T, U]):
 
         except grpcclient.InferenceServerException as e:
             fmt_e = str(e).lower()
-            if "statuscode.deadline_exceeded" in fmt_e:
+            if 'statuscode.deadline_exceeded' in fmt_e:
                 raise TritonConnectionError(url=self.url, model_name=self.model_name)
-            elif "statuscode.invalid_argument" in fmt_e:
+            elif 'statuscode.invalid_argument' in fmt_e:
                 parsed_error = self._parse_triton_invalid_arg_error(str(e))
                 raise parsed_error
-            elif "not found" in fmt_e or "uknown_model" in fmt_e:
+            elif 'not found' in fmt_e or 'uknown_model' in fmt_e:
                 raise TritonModelNotFoundError(self.model_name, self.model_version)
             else:
-                raise TritonError(
-                    error_type="other", model_name=self.model_name, message=str(e)
-                )
+                raise TritonError(error_type='other', model_name=self.model_name, message=str(e))
 
         if res is None:
             raise TritonEmptyOutputError(
@@ -416,15 +410,15 @@ class BaseTritonModel(ABC, Generic[T, U]):
             single run delta.
         """
         batch_size = self.get_batch_size(list(self.inputs.keys())[0])
-        self._pr_hist.with_method(
-            subsystem="triton-batch-latency", method=self.model_name
-        ).observe(delta)
-        self._pr_hist.with_method(
-            subsystem="triton-latency", method=self.model_name
-        ).observe(delta / batch_size)
-        self._pr_gauge.with_method(
-            subsystem="triton-batch-size", method=self.model_name
-        ).set(batch_size)
+        self._pr_hist.with_method(subsystem='triton-batch-latency', method=self.model_name).observe(
+            delta
+        )
+        self._pr_hist.with_method(subsystem='triton-latency', method=self.model_name).observe(
+            delta / batch_size
+        )
+        self._pr_gauge.with_method(subsystem='triton-batch-size', method=self.model_name).set(
+            batch_size
+        )
 
     def apply(self, input: T, priority: int = 0) -> U:
         """
@@ -490,7 +484,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
         """Cleanup resources used by memory managers."""
         if self._model_cleaned_up:
             return
-        elif hasattr(self, "memory_manager") and self.memory_manager is not None:
+        elif hasattr(self, 'memory_manager') and self.memory_manager is not None:
             frame = inspect.currentframe()
             outer_frame = inspect.getouterframes(frame)[1]
             file_name = outer_frame.filename
@@ -498,8 +492,8 @@ class BaseTritonModel(ABC, Generic[T, U]):
             process_name = multiprocessing.current_process().name
             thread_name = threading.current_thread().name
             LOGGER.info(
-                f"Cleanup called from file: {file_name}, line: {line_number}, "
-                f"process: {process_name}, thread: {thread_name}, model: {self.model_name}"
+                f'Cleanup called from file: {file_name}, line: {line_number}, '
+                f'process: {process_name}, thread: {thread_name}, model: {self.model_name}'
             )
             self.memory_manager.cleanup()
         self._model_cleaned_up = True
@@ -516,7 +510,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
         try:
             fake_inputs = self.generate_fake_data()
             self.run_model(fake_inputs, priority=0)
-            return EValidationStatus.SUCCESS, "success"
+            return EValidationStatus.SUCCESS, 'success'
         except TritonInvalidShapeError as e:
             return EValidationStatus.INVALID_INPUT_SHAPE, str(e)
         except TritonEmptyOutputError as e:
@@ -553,9 +547,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
         return fake_data
 
     @classmethod
-    def create_client(
-        cls, triton_config: TritonConfig
-    ) -> grpcclient.InferenceServerClient:
+    def create_client(cls, triton_config: TritonConfig) -> grpcclient.InferenceServerClient:
         """Create triton client from config.
 
         Parameters
@@ -568,16 +560,16 @@ class BaseTritonModel(ABC, Generic[T, U]):
         grpcclient.InfernceServerClient
             inference server client instance.
         """
-        return grpcclient.InferenceServerClient(
-            f"{triton_config.host}:{triton_config.port}"
-        )
+        return grpcclient.InferenceServerClient(f'{triton_config.host}:{triton_config.port}')
 
     def _parse_triton_invalid_arg_error(self, error_message: str) -> TritonError:
         input_pattern = (
             r"\[statuscode\.invalid_argument\] unexpected inference input '(.+)' "
             + r"for model '(.+)'"
         )
-        output_pattern = r"\[statuscode\.invalid_argument\] unexpected inference output '(.+)' for model '(.+)'"
+        output_pattern = (
+            r"\[statuscode\.invalid_argument\] unexpected inference output '(.+)' for model '(.+)'"
+        )
         shape_pattern = (
             r"\[statuscode\.invalid_argument\] unexpected shape for input '(.+)' "
             + r"for model '(.+)'. expected \[(.+)\], got \[(.+)\]"
@@ -585,9 +577,7 @@ class BaseTritonModel(ABC, Generic[T, U]):
 
         if match := re.match(input_pattern, error_message, flags=re.IGNORECASE):
             input_name, _ = match.groups()
-            return TritonUnknownInputNameError(
-                model_name=self.model_name, argument_name=input_name
-            )
+            return TritonUnknownInputNameError(model_name=self.model_name, argument_name=input_name)
         if match := re.match(output_pattern, error_message, flags=re.IGNORECASE):
             output_name, _ = match.groups()
             return TritonUnknownOutputNameError(
@@ -595,8 +585,8 @@ class BaseTritonModel(ABC, Generic[T, U]):
             )
         if match := re.match(shape_pattern, error_message, flags=re.IGNORECASE):
             input_name, _, expected_shape_str, got_shape_str = match.groups()
-            expected_shape = tuple(int(s) for s in expected_shape_str.split(","))
-            got_shape = tuple(int(s) for s in got_shape_str.split(","))
+            expected_shape = tuple(int(s) for s in expected_shape_str.split(','))
+            got_shape = tuple(int(s) for s in got_shape_str.split(','))
             return TritonInvalidShapeError(
                 input_name=input_name,
                 model_name=self.model_name,
@@ -604,5 +594,5 @@ class BaseTritonModel(ABC, Generic[T, U]):
                 received=got_shape,
             )
         return TritonInvalidArgumentError(
-            model_name=self.model_name, argument_name="", detail=error_message
+            model_name=self.model_name, argument_name='', detail=error_message
         )

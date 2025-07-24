@@ -8,7 +8,7 @@ from ..models_factory import TritonModelFactory
 from .base_image_encoder import BaseImageEncoderTritonModel
 
 
-@TritonModelFactory.register_model(model_type="image-encoder", arch_type="clip-image")
+@TritonModelFactory.register_model(model_type='image-encoder', arch_type='clip-image')
 class OpenCLIPImageEncoderTritonModel(BaseImageEncoderTritonModel):
     """Implements an image encoder for OpenCLIP models using Hugging Face interface.
 
@@ -34,4 +34,4 @@ class OpenCLIPImageEncoderTritonModel(BaseImageEncoderTritonModel):
         AutoImageProcessor
             Hugging Face image processor instance for OpenCLIP.
         """
-        return AutoImageProcessor.from_pretrained("laion/CLIP-ViT-H-14-laion2B-s32B-b79K")
+        return AutoImageProcessor.from_pretrained('laion/CLIP-ViT-H-14-laion2B-s32B-b79K')

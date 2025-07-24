@@ -6,11 +6,11 @@ from .roialign_encoder import RoiAlignEncoderTritonModel
 from .vit_encoder import VitCropEncoderTritonModel
 
 __all__ = [
-    "ImageWithBoxes",
-    "BaseEncoderTritonModel",
-    "RoiAlignEncoderTritonModel",
-    "CropEncoderTritonModel",
-    "OsnetEncoderTritonModel",
-    "VitCropEncoderTritonModel",
-    "FacenetCropEncoderTritonModel",
+    'ImageWithBoxes',
+    'BaseEncoderTritonModel',
+    'RoiAlignEncoderTritonModel',
+    'CropEncoderTritonModel',
+    'OsnetEncoderTritonModel',
+    'VitCropEncoderTritonModel',
+    'FacenetCropEncoderTritonModel',
 ]

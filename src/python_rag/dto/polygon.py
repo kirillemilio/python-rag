@@ -566,7 +566,7 @@ class Polygon(Region):
             cloned polygon.
         """
         if not isinstance(polygon, Polygon):
-            raise ValueError("Input must be an instance of Polygon")
+            raise ValueError('Input must be an instance of Polygon')
 
         new_polygon = cls(polygon.get_raw_polygon().exterior.coords)
         return new_polygon
@@ -622,7 +622,7 @@ class Polygon(Region):
             If the numpy array is not 2-dimensional or the second dimension is not 2.
         """
         if np_array.ndim != 2 or np_array.shape[1] != 2:
-            raise ValueError("NumPy array must be 2-dimensional with shape (n, 2).")
+            raise ValueError('NumPy array must be 2-dimensional with shape (n, 2).')
         points: list[tuple[float, ...]] = list(map(tuple, np_array))  # type: ignore
         return cls(points)
 
@@ -685,9 +685,9 @@ class Polygon(Region):
         ValueError
             If the dictionary does not contain a 'points' key or it is not a list.
         """
-        if "points" not in data or not isinstance(data["points"], list):
+        if 'points' not in data or not isinstance(data['points'], list):
             raise ValueError("Dictionary must have a 'points' key with a list of tuples.")
-        return cls.from_list(data["points"])
+        return cls.from_list(data['points'])
 
     def to_dict(self) -> Dict:
         """
@@ -698,7 +698,7 @@ class Polygon(Region):
         Dict
             A dictionary with 'points' as a key and a list of [x, y] coordinates as the value.
         """
-        return {"points": self.to_list()}
+        return {'points': self.to_list()}
 
     def rescale(self, scale_x: float, scale_y: float, inplace: bool = False) -> Polygon:
         """
@@ -1096,7 +1096,7 @@ class BBox(BaseModel, Region):
             if bounding box is not valid. See method is_valid() for more information.
         """
         if not self.is_valid():
-            raise ValueError("Invalid bounding box.")
+            raise ValueError('Invalid bounding box.')
         return (self.x2 - self.x1) * (self.y2 - self.y1)
 
     def get_inter(self, other: Region) -> float:
@@ -1158,44 +1158,44 @@ class BBox(BaseModel, Region):
 
     @staticmethod
     def _list_to_dict(
-        bbox_list: List[float], fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]
+        bbox_list: List[float], fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']
     ) -> XYXYDict:
-        if fmt == "xyxy":
-            return {"x1": bbox_list[0], "y1": bbox_list[1], "x2": bbox_list[2], "y2": bbox_list[3]}
-        elif fmt == "cxywh":
+        if fmt == 'xyxy':
+            return {'x1': bbox_list[0], 'y1': bbox_list[1], 'x2': bbox_list[2], 'y2': bbox_list[3]}
+        elif fmt == 'cxywh':
             cx, cy, w, h = bbox_list
             x1 = cx - w / 2
             y1 = cy - h / 2
             x2 = cx + w / 2
             y2 = cy + h / 2
-            return {"x1": x1, "y1": y1, "x2": x2, "y2": y2}
-        elif fmt == "cxyah":
+            return {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2}
+        elif fmt == 'cxyah':
             cx, cy, ar, h = bbox_list
             w = h * ar
             x1 = cx - w / 2
             y1 = cy - h / 2
             x2 = cx + w / 2
             y2 = cy + h / 2
-            return {"x1": x1, "y1": y1, "x2": x2, "y2": y2}
-        elif fmt == "tlah":
+            return {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2}
+        elif fmt == 'tlah':
             x, y, ar, h = bbox_list
             w = h * ar
             x1 = x
             y1 = y
             x2 = x + w
             y2 = y + h
-            return {"x1": x1, "y1": y1, "x2": x2, "y2": y2}
-        elif fmt == "tlwh":
+            return {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2}
+        elif fmt == 'tlwh':
             x, y, w, h = bbox_list
-            return {"x1": x, "y1": y, "x2": x + w, "y2": y + h}
+            return {'x1': x, 'y1': y, 'x2': x + w, 'y2': y + h}
         else:
-            raise ValueError(f"Unsupported BBox format: {fmt}")
+            raise ValueError(f'Unsupported BBox format: {fmt}')
 
     @classmethod
     def from_dict(
         cls,
         bbox_dict: Union[XYXYDict, CXYWHDict, TLWHDict, CXYAHDict, TLAHDict],
-        fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"],
+        fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah'],
     ) -> BBox:
         """Create BBox object from dict.
 
@@ -1209,22 +1209,22 @@ class BBox(BaseModel, Region):
         BBox
             resulting BBox object.
         """
-        if fmt == "xyxy":
+        if fmt == 'xyxy':
             bbox_dict = cast(XYXYDict, bbox_dict)
             return cls(**bbox_dict)
 
-        elif fmt == "cxywh":
+        elif fmt == 'cxywh':
             bbox_dict = cast(CXYWHDict, bbox_dict)
-            cx, cy, w, h = bbox_dict["cx"], bbox_dict["cy"], bbox_dict["w"], bbox_dict["h"]
+            cx, cy, w, h = bbox_dict['cx'], bbox_dict['cy'], bbox_dict['w'], bbox_dict['h']
             x1 = cx - w / 2
             y1 = cy - h / 2
             x2 = cx + w / 2
             y2 = cy + h / 2
             return cls(x1=x1, y1=y1, x2=x2, y2=y2)
 
-        elif fmt == "cxyah":
+        elif fmt == 'cxyah':
             bbox_dict = cast(CXYAHDict, bbox_dict)
-            cx, cy, ar, h = bbox_dict["cx"], bbox_dict["cy"], bbox_dict["a"], bbox_dict["h"]
+            cx, cy, ar, h = bbox_dict['cx'], bbox_dict['cy'], bbox_dict['a'], bbox_dict['h']
             w = h * ar
             x1 = cx - w / 2
             y1 = cy - h / 2
@@ -1232,18 +1232,18 @@ class BBox(BaseModel, Region):
             y2 = cy + h / 2
             return cls(x1=x1, y1=y1, x2=x2, y2=y2)
 
-        elif fmt == "tlwh":
+        elif fmt == 'tlwh':
             bbox_dict = cast(TLWHDict, bbox_dict)
-            x, y, w, h = bbox_dict["x"], bbox_dict["y"], bbox_dict["w"], bbox_dict["h"]
+            x, y, w, h = bbox_dict['x'], bbox_dict['y'], bbox_dict['w'], bbox_dict['h']
             x1 = x
             y1 = y
             x2 = x + w
             y2 = y + h
             return cls(x1=x1, y1=y1, x2=x2, y2=y2)
 
-        elif fmt == "tlah":
+        elif fmt == 'tlah':
             bbox_dict = cast(TLAHDict, bbox_dict)
-            x, y, ar, h = bbox_dict["x"], bbox_dict["y"], bbox_dict["a"], bbox_dict["h"]
+            x, y, ar, h = bbox_dict['x'], bbox_dict['y'], bbox_dict['a'], bbox_dict['h']
             w = h * ar
             x1 = x
             y1 = y
@@ -1252,9 +1252,9 @@ class BBox(BaseModel, Region):
             return cls(x1=x1, y1=y1, x2=x2, y2=y2)
 
         else:
-            raise ValueError(f"Unsupported BBox format: {fmt}")
+            raise ValueError(f'Unsupported BBox format: {fmt}')
 
-    def to_dict(self, fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]) -> BBoxDict:
+    def to_dict(self, fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']) -> BBoxDict:
         """Convert bounding box to dict.
 
         Parameters
@@ -1266,28 +1266,28 @@ class BBox(BaseModel, Region):
         -------
         BBoxDict
         """
-        if fmt == "xyxy":
-            return {"x1": self.x1, "y1": self.y1, "x2": self.x2, "y2": self.y2}
+        if fmt == 'xyxy':
+            return {'x1': self.x1, 'y1': self.y1, 'x2': self.x2, 'y2': self.y2}
 
-        elif fmt == "cxywh":
-            return {"cx": self.cx, "cy": self.cy, "w": self.width, "h": self.height}
+        elif fmt == 'cxywh':
+            return {'cx': self.cx, 'cy': self.cy, 'w': self.width, 'h': self.height}
 
-        elif fmt == "cxyah":
+        elif fmt == 'cxyah':
             a = self.width / self.height if self.height > 0 else self.width / (self.height + 1e-12)
-            return {"cx": self.cx, "cy": self.cy, "a": a, "h": self.height}
+            return {'cx': self.cx, 'cy': self.cy, 'a': a, 'h': self.height}
 
-        elif fmt == "tlwh":
-            return {"x": self.x1, "y": self.y1, "w": self.width, "h": self.height}
-        elif fmt == "tlah":
+        elif fmt == 'tlwh':
+            return {'x': self.x1, 'y': self.y1, 'w': self.width, 'h': self.height}
+        elif fmt == 'tlah':
             a = self.width / self.height if self.height > 0 else self.width / (self.height + 1e-12)
-            return {"x": self.x1, "y": self.y1, "a": a, "h": self.height}
+            return {'x': self.x1, 'y': self.y1, 'a': a, 'h': self.height}
 
         else:
-            raise ValueError(f"Unsupported BBox format: {fmt}")
+            raise ValueError(f'Unsupported BBox format: {fmt}')
 
     @classmethod
     def from_numpy(
-        cls, bbox_array: NDArray[np.float32], fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]
+        cls, bbox_array: NDArray[np.float32], fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']
     ) -> BBox:
         """Create BBox object from 1d numpy array.
 
@@ -1303,12 +1303,12 @@ class BBox(BaseModel, Region):
             resulting BBox object.
         """
         if bbox_array.ndim != 1:
-            raise ValueError("Array must be one-dimensional and of type float.")
+            raise ValueError('Array must be one-dimensional and of type float.')
 
         return cls.from_list(bbox_list=bbox_array.tolist(), fmt=fmt)
 
     def to_numpy(
-        self, fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]
+        self, fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']
     ) -> NDArray[np.float32]:
         """Transform bounding box to 1d numpy array.
 
@@ -1329,7 +1329,7 @@ class BBox(BaseModel, Region):
 
     @classmethod
     def from_list(
-        cls, bbox_list: List[float], fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]
+        cls, bbox_list: List[float], fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']
     ) -> BBox:
         """Create BBox object from list.
 
@@ -1346,15 +1346,15 @@ class BBox(BaseModel, Region):
             resulting BBox object.
         """
         if len(bbox_list) != 4:
-            raise ValueError("List must contain exactly four elements.")
+            raise ValueError('List must contain exactly four elements.')
 
         if not all(isinstance(x, float) for x in bbox_list):
-            raise ValueError("All elements in the list must be of type float.")
+            raise ValueError('All elements in the list must be of type float.')
 
         bbox_dict = cls._list_to_dict(bbox_list, fmt)
-        return cls.from_dict(bbox_dict, fmt="xyxy")
+        return cls.from_dict(bbox_dict, fmt='xyxy')
 
-    def to_list(self, fmt: Literal["xyxy", "cxywh", "tlwh", "cxyah", "tlah"]) -> List[float]:
+    def to_list(self, fmt: Literal['xyxy', 'cxywh', 'tlwh', 'cxyah', 'tlah']) -> List[float]:
         """Transform bounding box to list.
 
         Parameters
@@ -1368,23 +1368,23 @@ class BBox(BaseModel, Region):
             list of size 4 in the following
         """
         bbox_dict = self.to_dict(fmt)
-        if fmt == "xyxy":
+        if fmt == 'xyxy':
             bbox_dict = cast(XYXYDict, bbox_dict)
-            return [bbox_dict["x1"], bbox_dict["y1"], bbox_dict["x2"], bbox_dict["y2"]]
-        elif fmt == "cxywh":
+            return [bbox_dict['x1'], bbox_dict['y1'], bbox_dict['x2'], bbox_dict['y2']]
+        elif fmt == 'cxywh':
             bbox_dict = cast(CXYWHDict, bbox_dict)
-            return [bbox_dict["cx"], bbox_dict["cy"], bbox_dict["w"], bbox_dict["h"]]
-        elif fmt == "cxyah":
+            return [bbox_dict['cx'], bbox_dict['cy'], bbox_dict['w'], bbox_dict['h']]
+        elif fmt == 'cxyah':
             bbox_dict = cast(CXYAHDict, bbox_dict)
-            return [bbox_dict["cx"], bbox_dict["cy"], bbox_dict["a"], bbox_dict["h"]]
-        elif fmt == "tlwh":
+            return [bbox_dict['cx'], bbox_dict['cy'], bbox_dict['a'], bbox_dict['h']]
+        elif fmt == 'tlwh':
             bbox_dict = cast(TLWHDict, bbox_dict)
-            return [bbox_dict["x"], bbox_dict["y"], bbox_dict["w"], bbox_dict["h"]]
-        elif fmt == "tlah":
+            return [bbox_dict['x'], bbox_dict['y'], bbox_dict['w'], bbox_dict['h']]
+        elif fmt == 'tlah':
             bbox_dict = cast(TLAHDict, bbox_dict)
-            return [bbox_dict["x"], bbox_dict["y"], bbox_dict["a"], bbox_dict["h"]]
+            return [bbox_dict['x'], bbox_dict['y'], bbox_dict['a'], bbox_dict['h']]
         else:
-            raise NotImplementedError(f"Uknown format: {fmt}")
+            raise NotImplementedError(f'Uknown format: {fmt}')
 
     @classmethod
     def from_polygon(cls, polygon: Polygon) -> BBox:
@@ -1476,7 +1476,7 @@ class BBox(BaseModel, Region):
             of 2 or 3 dimension.
         """
         if image.ndim not in (2, 3):
-            raise ValueError("Image shape must be 2 or 3 dim")
+            raise ValueError('Image shape must be 2 or 3 dim')
         if image.ndim == 2:
             image = image[:, :, np.newaxis]
         return image[int(self.y1) : int(self.y2), int(self.x1) : int(self.x2), :]

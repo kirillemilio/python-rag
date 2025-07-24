@@ -11,7 +11,7 @@ from .base_chunker import BaseChunker
 from .chunker_factory import ChunkerFactory
 
 
-@ChunkerFactory.register_chunker(chunker_type="token", config_cls=TokenChunkerConfig)
+@ChunkerFactory.register_chunker(chunker_type='token', config_cls=TokenChunkerConfig)
 class TokenChunker(BaseChunker):
     """LangChain token text splitter wrapper."""
 
@@ -24,7 +24,7 @@ class TokenChunker(BaseChunker):
         self,
         chunk_size: int = 512,
         chunk_overlap: int = 50,
-        encoding_name: str = "gpt2",
+        encoding_name: str = 'gpt2',
     ) -> None:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap

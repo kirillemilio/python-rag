@@ -40,11 +40,11 @@ class PostgresConfig(BaseModel):
         Full connection URI, auto-computed if not explicitly provided.
     """
 
-    host: str = Field(default="localhost")
+    host: str = Field(default='localhost')
     port: int = Field(default=5432)
-    user: str = Field(default="postgres")
+    user: str = Field(default='postgres')
     password: Optional[str] = None
-    database: str = Field(default="postgres")
+    database: str = Field(default='postgres')
     use_ssl: bool = Field(default=False)
     application_name: Optional[str] = None
 
@@ -57,12 +57,12 @@ class PostgresConfig(BaseModel):
         str
             full dsn address.
         """
-        userinfo = f"{self.user}:{self.password}" if self.password else self.user
-        sslmode = "require" if self.use_ssl else "prefer"
-        query = f"?sslmode={sslmode}"
-        return f"postgresql://{userinfo}@{self.host}:{self.port}/{self.database}{query}"
+        userinfo = f'{self.user}:{self.password}' if self.password else self.user
+        sslmode = 'require' if self.use_ssl else 'prefer'
+        query = f'?sslmode={sslmode}'
+        return f'postgresql://{userinfo}@{self.host}:{self.port}/{self.database}{query}'
 
-    @model_validator(mode="after")
+    @model_validator(mode='after')
     def validate_dsn(self):
         """Validate DSN format if manually provided."""
         PostgresDsn.validate(self.dsn)

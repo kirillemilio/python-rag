@@ -38,7 +38,7 @@ class RecursiveCharChunkerConfig(BaseChunkerConfig):
         Number of overlapping characters between consecutive chunks.
     """
 
-    chunker_type: Literal["recursive"]
+    chunker_type: Literal['recursive']
     chunk_size: int = 512
     chunk_overlap: int = 50
 
@@ -61,10 +61,10 @@ class CharChunkerConfig(BaseChunkerConfig):
         Separator string used to split the text.
     """
 
-    chunker_type: Literal["char"]
+    chunker_type: Literal['char']
     chunk_size: int = 512
     chunk_overlap: int = 50
-    separator: str = "\n\n"
+    separator: str = '\n\n'
 
 
 class TokenChunkerConfig(BaseChunkerConfig):
@@ -85,10 +85,10 @@ class TokenChunkerConfig(BaseChunkerConfig):
         Name of the tokenizer encoding (e.g., "gpt2", "cl100k_base").
     """
 
-    chunker_type: Literal["token"]
+    chunker_type: Literal['token']
     chunk_size: int = 512
     chunk_overlap: int = 50
-    encoding_name: str = "gpt2"
+    encoding_name: str = 'gpt2'
 
 
 ChunkerConfigUnion = TokenChunkerConfig | CharChunkerConfig | RecursiveCharChunkerConfig

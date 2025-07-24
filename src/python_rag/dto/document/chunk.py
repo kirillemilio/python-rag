@@ -117,7 +117,7 @@ class Chunk(BaseModel, IChunk):
             unique identifier of qdrant point.
         """
         return int.from_bytes(
-            hashlib.sha256(f"{self.document_id}{self.chunk_id:04d}".encode()).digest()
+            hashlib.sha256(f'{self.document_id}{self.chunk_id:04d}'.encode()).digest()
         ) % ((1 << 63) - 1)
 
     def to_dict(self) -> dict[str, Any]:

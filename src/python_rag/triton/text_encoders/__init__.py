@@ -5,7 +5,7 @@ from .mpnet_text_encoder import MPNetTextEncoderTritonModel
 from .openclip_text_encoder import OpenCLIPTextEncoderTritonModel
 
 __all__ = [
-    "BaseTextEncoderTritonModel",
-    "MPNetTextEncoderTritonModel",
-    "OpenCLIPTextEncoderTritonModel",
+    'BaseTextEncoderTritonModel',
+    'MPNetTextEncoderTritonModel',
+    'OpenCLIPTextEncoderTritonModel',
 ]

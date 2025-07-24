@@ -36,7 +36,7 @@ from ..triton.image_encoders import BaseImageEncoderTritonModel
 from ..triton.text_encoders import BaseTextEncoderTritonModel
 from .utils import ConfigLoader
 
-logging.basicConfig(format="%(asctime)s-%(levelname)s:%(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s-%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__file__)
 
 
@@ -71,9 +71,7 @@ class Retriever(RetrieverBase):
         self.text_encoder_alias_to_col = text_encoder_alias_to_col
         self.image_encoder_alias_to_col = image_encoder_alias_to_col
 
-    async def add_text_document(
-        self, message: TextDocumentAddRequest
-    ) -> TextDocumentAddResponse:
+    async def add_text_document(self, message: TextDocumentAddRequest) -> TextDocumentAddResponse:
         """Add a text document to the vector store.
 
         Parameters
@@ -107,7 +105,7 @@ class Retriever(RetrieverBase):
                 created_at=document.get_created_at(),
             )
         except Exception as e:
-            logger.exception("Failed to add document")
+            logger.exception('Failed to add document')
             raise GRPCError(status=Status.INTERNAL, message=str(e))
 
     async def search_by_image(self, message: ImageRequest) -> TextChunksResponse:
@@ -132,7 +130,7 @@ class Retriever(RetrieverBase):
         if collection is None:
             raise GRPCError(
                 status=Status.NOT_FOUND,
-                message=f"Collection or model not found: `{message.model}`",
+                message=f'Collection or model not found: `{message.model}`',
             )
         try:
             scored_chunks = await self.handler.search_by_image(request=message)
@@ -152,7 +150,7 @@ class Retriever(RetrieverBase):
                 )
             return TextChunksResponse(request_id=message.request_id, chunks=chunks)
         except Exception as e:
-            logger.exception("Failed to perform image search")
+            logger.exception('Failed to perform image search')
             raise GRPCError(status=Status.INTERNAL, message=str(e))
 
     async def search_by_text(self, message: TextRequest) -> TextChunksResponse:
@@ -177,7 +175,7 @@ class Retriever(RetrieverBase):
         if collection is None:
             raise GRPCError(
                 status=Status.NOT_FOUND,
-                message=f"Text collection or model not found: `{message.model}`",
+                message=f'Text collection or model not found: `{message.model}`',
             )
         try:
             scored_chunks = await self.handler.search_by_text(request=message)
@@ -197,7 +195,7 @@ class Retriever(RetrieverBase):
                 )
             return TextChunksResponse(request_id=message.request_id, chunks=chunks)
         except Exception as e:
-            logger.exception("Failed to perform text search")
+            logger.exception('Failed to perform text search')
             raise GRPCError(status=Status.INTERNAL, message=str(e))
 
 
@@ -217,18 +215,14 @@ async def serve(host: str, port: int, config: str) -> None:
         Path to the service configuration file.
     """
     env_settings = get_env_settings()
-    logger.info(f"Environment settings: {env_settings}")
-    service_config: ServiceConfig = ConfigLoader.load_config(
-        config, config_class=ServiceConfig
-    )
+    logger.info(f'Environment settings: {env_settings}')
+    service_config: ServiceConfig = ConfigLoader.load_config(config, config_class=ServiceConfig)
 
     col_configs = {
-        col_config.name: col_config
-        for col_config in service_config.image_encoders.values()
+        col_config.name: col_config for col_config in service_config.image_encoders.values()
     }
     col_configs |= {
-        col_config.name: col_config
-        for col_config in service_config.text_encoders.values()
+        col_config.name: col_config for col_config in service_config.text_encoders.values()
     }
     TritonModelsPoolHolder.init(models_pool_config=service_config.models_pool)
     await QdrantManagerHodler.init(
@@ -239,18 +233,16 @@ async def serve(host: str, port: int, config: str) -> None:
 
     image_encoders: dict[str, BaseImageEncoderTritonModel] = {}
     for encoder_name, col_config in service_config.image_encoders.items():
-        image_encoders[
-            encoder_name
-        ] = TritonModelsPoolHolder.get_models_pool().get_model(
-            col_config.name, model_type=BaseImageEncoderTritonModel  # type: ignore
+        image_encoders[encoder_name] = TritonModelsPoolHolder.get_models_pool().get_model(
+            col_config.name,
+            model_type=BaseImageEncoderTritonModel,  # type: ignore
         )
 
     text_encoders: dict[str, BaseTextEncoderTritonModel] = {}
     for encoder_name, col_config in service_config.text_encoders.items():
-        text_encoders[
-            encoder_name
-        ] = TritonModelsPoolHolder.get_models_pool().get_model(
-            col_config.name, model_type=BaseTextEncoderTritonModel  # type: ignore
+        text_encoders[encoder_name] = TritonModelsPoolHolder.get_models_pool().get_model(
+            col_config.name,
+            model_type=BaseTextEncoderTritonModel,  # type: ignore
         )
 
     handler = BaseHandler(
@@ -264,12 +256,8 @@ async def serve(host: str, port: int, config: str) -> None:
         [
             Retriever(
                 handler=handler,
-                text_encoder_alias_to_col={
-                    k: v.model_name for k, v in text_encoders.items()
-                },
-                image_encoder_alias_to_col={
-                    k: v.model_name for k, v in image_encoders.items()
-                },
+                text_encoder_alias_to_col={k: v.model_name for k, v in text_encoders.items()},
+                image_encoder_alias_to_col={k: v.model_name for k, v in image_encoders.items()},
             )
         ]
     )
@@ -277,15 +265,13 @@ async def serve(host: str, port: int, config: str) -> None:
     await server.wait_closed()
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="Python preprocessor service for embeddings")
-    parser.add_argument("--host", type=str, default="localhost")
-    parser.add_argument("--port", type=int, default=50081)
-    parser.add_argument("--config", type=str)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='Python preprocessor service for embeddings')
+    parser.add_argument('--host', type=str, default='localhost')
+    parser.add_argument('--port', type=int, default=50081)
+    parser.add_argument('--config', type=str)
     args = parser.parse_args()
     host: str = args.host
     port: int = args.port
     config: str = args.config
-    asyncio.get_event_loop().run_until_complete(
-        serve(host=host, port=port, config=config)
-    )
+    asyncio.get_event_loop().run_until_complete(serve(host=host, port=port, config=config))

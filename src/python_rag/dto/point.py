@@ -102,7 +102,7 @@ class Point(BaseModel):
         scale_x, scale_y = to_size.w / from_size.w, to_size.w / from_size.w
         return self.rescale(scale_x=scale_x, scale_y=scale_y, inplace=inplace)
 
-    def to_numpy(self, fmt: Literal["xy", "yx"] = "xy") -> NDArray[np.float32]:
+    def to_numpy(self, fmt: Literal['xy', 'yx'] = 'xy') -> NDArray[np.float32]:
         """Convert point coordinates to numpy array.
 
         Parameters
@@ -118,7 +118,7 @@ class Point(BaseModel):
         """
         return np.array(self.to_list(fmt=fmt), dtype=np.float32)
 
-    def to_tuple(self, fmt: Literal["xy", "yx"] = "xy") -> Tuple[float, ...]:
+    def to_tuple(self, fmt: Literal['xy', 'yx'] = 'xy') -> Tuple[float, ...]:
         """Convert point coordinates to tuple of floats.
 
         Parameters
@@ -133,7 +133,7 @@ class Point(BaseModel):
         """
         return tuple(self.to_list(fmt=fmt))
 
-    def to_list(self, fmt: Literal["xy", "yx"] = "xy") -> List[float]:
+    def to_list(self, fmt: Literal['xy', 'yx'] = 'xy') -> List[float]:
         """Convert point coordinates to list of floats.
 
         Parameters
@@ -146,7 +146,7 @@ class Point(BaseModel):
         List[float]
             list of point coordinates in xy or yx order.
         """
-        return [self.x, self.y] if fmt == "xy" else [self.y, self.x]
+        return [self.x, self.y] if fmt == 'xy' else [self.y, self.x]
 
     def to_dict(self) -> Dict[str, float]:
         """Convert point coordinates to dict.
@@ -160,7 +160,7 @@ class Point(BaseModel):
             and values corresponding to point's
             coordinates.
         """
-        return {"x": self.x, "y": self.y}
+        return {'x': self.x, 'y': self.y}
 
     def clone(self) -> Point:
         """Create a deep copy of this point.

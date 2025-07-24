@@ -10,7 +10,7 @@ from ..transforms import get_transform_sequence
 from .classifier import ClassifierTritonModel
 
 
-@TritonModelFactory.register_model(model_type="classifier", arch_type="age-v5")
+@TritonModelFactory.register_model(model_type='classifier', arch_type='age-v5')
 class AgeV5ClassifierTritonModel(ClassifierTritonModel):
     """
     A specialized trition model class for age classification task.
@@ -34,11 +34,11 @@ class AgeV5ClassifierTritonModel(ClassifierTritonModel):
             size=self.input_size,
             mean=(0.485, 0.456, 0.406),
             std=(0.229, 0.224, 0.225),
-            crop_mode="top",
+            crop_mode='top',
         )
 
 
-@TritonModelFactory.register_model(model_type="classifier", arch_type="age-v8")
+@TritonModelFactory.register_model(model_type='classifier', arch_type='age-v8')
 class AgeV8ClassifierTritonModel(ClassifierTritonModel):
     """
     A specialized trition model class for age classification task.
@@ -62,5 +62,5 @@ class AgeV8ClassifierTritonModel(ClassifierTritonModel):
             size=self.input_size,
             mean=(0.0, 0.0, 0.0),
             std=(1.0, 1.0, 1.0),
-            crop_mode="top",
+            crop_mode='top',
         )

@@ -24,9 +24,7 @@ class ChunkWithEmbedding(IChunk):
     model_name: str
     embedding: NDArray[np.float32]
 
-    def __init__(
-        self, chunk: IChunk, embedding: NDArray[np.float32], model_name: str
-    ) -> None:
+    def __init__(self, chunk: IChunk, embedding: NDArray[np.float32], model_name: str) -> None:
         """
         Initialize a chunk with its corresponding embedding vector and model metadata.
 
@@ -138,7 +136,7 @@ class ChunkWithEmbedding(IChunk):
         dict[str, Any]
             dictionary representation of chunk
         """
-        return {**self.chunk.to_dict(), "embedding": self.embedding.tolist()}
+        return {**self.chunk.to_dict(), 'embedding': self.embedding.tolist()}
 
     def get_embedding(self, clone: bool = False) -> NDArray[np.float32]:
         """Get embedding vector.

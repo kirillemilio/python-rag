@@ -101,7 +101,7 @@ class Shift(BaseModel):
         """
         return np.sqrt(self.x**2 + self.y**2)
 
-    def get_normal(self, orient: Literal["clockwise", "counterclockwise"] = "clockwise") -> Shift:
+    def get_normal(self, orient: Literal['clockwise', 'counterclockwise'] = 'clockwise') -> Shift:
         """
         Get a perpendicular (normal) vector to this shift.
 
@@ -115,9 +115,9 @@ class Shift(BaseModel):
         Shift
             Perpendicular shift vector.
         """
-        return Shift(x=self.y, y=-self.x) if orient == "clockwise" else Shift(x=-self.y, y=self.x)
+        return Shift(x=self.y, y=-self.x) if orient == 'clockwise' else Shift(x=-self.y, y=self.x)
 
-    def to_numpy(self, fmt: Literal["xy", "yx"] = "xy") -> NDArray[np.float32]:
+    def to_numpy(self, fmt: Literal['xy', 'yx'] = 'xy') -> NDArray[np.float32]:
         """
         Convert shift to NumPy array.
 
@@ -133,7 +133,7 @@ class Shift(BaseModel):
         """
         return np.array(self.to_list(fmt), dtype=np.float32)
 
-    def to_tuple(self, fmt: Literal["xy", "yx"] = "xy") -> Tuple[float, ...]:
+    def to_tuple(self, fmt: Literal['xy', 'yx'] = 'xy') -> Tuple[float, ...]:
         """
         Convert shift to tuple.
 
@@ -149,7 +149,7 @@ class Shift(BaseModel):
         """
         return tuple(self.to_list(fmt))
 
-    def to_list(self, fmt: Literal["xy", "yx"] = "xy") -> List[float]:
+    def to_list(self, fmt: Literal['xy', 'yx'] = 'xy') -> List[float]:
         """
         Convert shift to list.
 
@@ -163,7 +163,7 @@ class Shift(BaseModel):
         list of float
             List representation.
         """
-        return [self.x, self.y] if fmt == "xy" else [self.y, self.x]
+        return [self.x, self.y] if fmt == 'xy' else [self.y, self.x]
 
     def to_dict(self) -> Dict[str, float]:
         """
@@ -174,35 +174,84 @@ class Shift(BaseModel):
         dict
             Dictionary with keys 'x' and 'y'.
         """
-        return {"x": self.x, "y": self.y}
+        return {'x': self.x, 'y': self.y}
 
     # Arithmetic operations
     def add(self, other: Shift) -> Shift:
-        """Return elementwise sum of two shift vectors."""
+        """Return elementwise sum of two shift vectors.
+
+        Returns
+        -------
+        Shift
+            elementwise shift that is sum of two shift
+            vectors.
+        """
         return Shift(x=self.x + other.x, y=self.y + other.y)
 
     def sub(self, other: Shift) -> Shift:
-        """Return elementwise difference of two shift vectors."""
+        """Return elementwise difference of two shift vectors.
+
+        Returns
+        -------
+        Shift
+            elementwise shift that is the result of substraction
+            of two shift vectors.
+        """
         return Shift(x=self.x - other.x, y=self.y - other.y)
 
     def mul(self, factor: float) -> Shift:
-        """Return shift scaled by a scalar."""
+        """Return shift scaled by a scalar.
+
+        Returns
+        -------
+        Shift
+            shift vector that is the result of scalar
+            multiplication of shift coordinates
+            by some factor.
+        """
         return Shift(x=self.x * factor, y=self.y * factor)
 
     def div(self, factor: float) -> Shift:
-        """Return shift divided by a scalar."""
+        """Return shift divided by a scalar.
+
+        Returns
+        -------
+        Shift
+            shift vector that is the result of scalar
+            division operation of shift coordinates
+            by some factor.
+        """
         return self.mul(1.0 / factor)
 
     def dot(self, other: Shift) -> float:
-        """Return dot product of this and another shift."""
+        """Return dot product of this and another shift.
+
+        Returns
+        -------
+        float
+            result of dot product of two
+            shift vectors.
+        """
         return self.x * other.x + self.y * other.y
 
     def abs(self) -> Shift:
-        """Return shift with absolute value of each component."""
+        """Return shift with absolute value of each component.
+
+        Returns
+        -------
+        Shift
+            shift vector with coordiates' abs.
+        """
         return Shift(x=abs(self.x), y=abs(self.y))
 
     def neg(self) -> Shift:
-        """Return shift with negated components."""
+        """Return shift with negated components.
+
+        Returns
+        -------
+        Shift
+            shift vector with coordinates negated.
+        """
         return Shift(x=-self.x, y=-self.y)
 
     # Python magic methods
@@ -273,7 +322,7 @@ class Shift(BaseModel):
 
     def __str__(self) -> str:
         """Return short string representation of the shift."""
-        return f"Shift(x={self.x:.2f}, y={self.y:.2f})"
+        return f'Shift(x={self.x:.2f}, y={self.y:.2f})'
 
     def __repr__(self) -> str:
         """Return detailed string representation of the shift."""

@@ -68,7 +68,7 @@ class BaseImageEncoderTritonModel(BaseTritonModel[NDArray[np.uint8], NDArray[np.
         datatype: str,
         client_timeout: float | None,
         embedding_size: int,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         cushm_inputs: Optional[List[str]] = None,
         **kwargs,
@@ -155,9 +155,9 @@ class BaseImageEncoderTritonModel(BaseTritonModel[NDArray[np.uint8], NDArray[np.
         dict of str to NDArray[np.float32]
             Dictionary containing model input tensors.
         """
-        res = self.preprocesor(inputs, return_tensors="pt")  # type: ignore
+        res = self.preprocesor(inputs, return_tensors='pt')  # type: ignore
         return {
-            self.image_input_name: res["pixel_values"].float().numpy(),
+            self.image_input_name: res['pixel_values'].float().numpy(),
         }
 
     def postprocess(self, raw_outputs: Dict[str, NDArray[np.float32]]) -> List[NDArray[np.float32]]:

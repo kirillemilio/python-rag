@@ -48,7 +48,7 @@ class BaseEncoderTritonModel(BaseTritonModel[ImageWithBoxes, NDArray[np.float32]
         datatype: str,
         client_timeout: float | None,
         embedding_size: int,
-        model_version: str = "1",
+        model_version: str = '1',
         device_id: int = 0,
         cushm_inputs: Optional[List[str]] = None,
         **kwargs,

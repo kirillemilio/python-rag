@@ -16,16 +16,14 @@ from .triton import TritonConfig
 class EnvSettings(BaseSettings):
     """Service environment settings."""
 
-    service_name: str = Field(default="python-rag")
-    service_env: Literal["dev", "prod"] = "dev"
-    logging_dir: str = Field(default="./logs")
-    triton: TritonConfig = TritonConfig(host="localhost", port=8081)
+    service_name: str = Field(default='python-rag')
+    service_env: Literal['dev', 'prod'] = 'dev'
+    logging_dir: str = Field(default='./logs')
+    triton: TritonConfig = TritonConfig(host='localhost', port=8081)
     qdrant: QdrantConfig = QdrantConfig()
     #    postgres: PostgresConfig = PostgresConfig()
 
-    model_config = SettingsConfigDict(
-        env_nested_delimiter="__", env_file=".env", extra="allow"
-    )
+    model_config = SettingsConfigDict(env_nested_delimiter='__', env_file='.env', extra='allow')
 
 
 @lru_cache

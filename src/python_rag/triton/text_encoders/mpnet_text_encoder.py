@@ -8,7 +8,7 @@ from ..models_factory import TritonModelFactory
 from .base_text_encoder import BaseTextEncoderTritonModel
 
 
-@TritonModelFactory.register_model(model_type="text-encoder", arch_type="mpnet")
+@TritonModelFactory.register_model(model_type='text-encoder', arch_type='mpnet')
 class MPNetTextEncoderTritonModel(BaseTextEncoderTritonModel):
     """
     Implement a text encoder using the MPNet transformer model.
@@ -32,4 +32,4 @@ class MPNetTextEncoderTritonModel(BaseTextEncoderTritonModel):
         AutoTokenizer
             Tokenizer for 'sentence-transformers/all-mpnet-base-v2'.
         """
-        return AutoTokenizer.from_pretrained("sentence-transformers/all-mpnet-base-v2")
+        return AutoTokenizer.from_pretrained('sentence-transformers/all-mpnet-base-v2')

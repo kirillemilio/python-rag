@@ -14,15 +14,15 @@ from .triton import (
 )
 
 __all__ = [
-    "TritonConfig",
-    "ClassifierConfig",
-    "BaseModelConfig",
-    "CropEncoderConfig",
-    "DetectorConfig",
-    "NamedDefaultParameter",
-    "PointsDetectorConfig",
-    "RoiAlignEncoderConfig",
-    "SemanticSegmentatorConfig",
-    "TextRecognizerConfig",
-    "EnvSettings",
+    'TritonConfig',
+    'ClassifierConfig',
+    'BaseModelConfig',
+    'CropEncoderConfig',
+    'DetectorConfig',
+    'NamedDefaultParameter',
+    'PointsDetectorConfig',
+    'RoiAlignEncoderConfig',
+    'SemanticSegmentatorConfig',
+    'TextRecognizerConfig',
+    'EnvSettings',
 ]

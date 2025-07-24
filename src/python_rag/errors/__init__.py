@@ -3,4 +3,4 @@
 from .base_error import BaseError
 from .triton_error import TritonError
 
-__all__ = ["BaseError", "TritonError"]
+__all__ = ['BaseError', 'TritonError']

@@ -54,27 +54,25 @@ class TritonConfig(BaseModel):
         defaults = {name: field.default for name, field in self.model_fields.items()}
 
         # Always include host and port
-        formatted_config["host"] = self.host
-        formatted_config["port"] = self.port
+        formatted_config['host'] = self.host
+        formatted_config['port'] = self.port
 
         # Optional fields
-        if self.client_timeout != defaults["client_timeout"]:
-            formatted_config["client_timeout"] = self.client_timeout
-        if self.verbose != defaults["verbose"]:
-            formatted_config["verbose"] = self.verbose
-        if self.ssl != defaults["ssl"]:
-            formatted_config["ssl"] = self.ssl
+        if self.client_timeout != defaults['client_timeout']:
+            formatted_config['client_timeout'] = self.client_timeout
+        if self.verbose != defaults['verbose']:
+            formatted_config['verbose'] = self.verbose
+        if self.ssl != defaults['ssl']:
+            formatted_config['ssl'] = self.ssl
 
         # SSL/TLS specific fields (separated visually)
-        if self.root_certificates != defaults["root_certificates"]:
-            formatted_config.yaml_set_comment_before_after_key(
-                "root_certificates", before="\n"
-            )
-            formatted_config["root_certificates"] = self.root_certificates
-        if self.private_key != defaults["private_key"]:
-            formatted_config["private_key"] = self.private_key
-        if self.certificte_chain != defaults["certificte_chain"]:
-            formatted_config["certificte_chain"] = self.certificte_chain
+        if self.root_certificates != defaults['root_certificates']:
+            formatted_config.yaml_set_comment_before_after_key('root_certificates', before='\n')
+            formatted_config['root_certificates'] = self.root_certificates
+        if self.private_key != defaults['private_key']:
+            formatted_config['private_key'] = self.private_key
+        if self.certificte_chain != defaults['certificte_chain']:
+            formatted_config['certificte_chain'] = self.certificte_chain
 
         return formatted_config
         return formatted_config
@@ -126,10 +124,10 @@ class BaseModelConfig(BaseModel):
     name: str
 
     client_timeout: Optional[float] = None
-    compression_algorithm: Optional[Literal["deflate", "gzip"]] = None
+    compression_algorithm: Optional[Literal['deflate', 'gzip']] = None
     device_id: int = 0
     use_cushm: bool = True
-    version: str = ""
+    version: str = ''
 
     model_config = ConfigDict(protected_namespaces=())
 
@@ -152,7 +150,7 @@ class ClassifierConfig(BaseModelConfig):
         Mapping of output tensor names to their types.
     """
 
-    model_type: Literal["classifier"] = "classifier"
+    model_type: Literal['classifier'] = 'classifier'
     input_name: str
     outputs: List[str]
     image_size: Size
@@ -177,7 +175,7 @@ class TextEncoderConfig(BaseModelConfig):
         Name of embeddings output tensor.
     """
 
-    model_type: Literal["text-encoder"] = "text-encoder"
+    model_type: Literal['text-encoder'] = 'text-encoder'
 
     text_input_name: str
     mask_input_name: str
@@ -205,7 +203,7 @@ class ImageEncoderConfig(BaseModelConfig):
         Name of embeddings output tensor.
     """
 
-    model_type: Literal["image-encoder"] = "image-encoder"
+    model_type: Literal['image-encoder'] = 'image-encoder'
 
     image_input_name: str
     input_size: Size
@@ -233,7 +231,7 @@ class CropEncoderConfig(BaseModelConfig):
         Size of the embedding produced by the model.
     """
 
-    model_type: Literal["crop-encoder"] = "crop-encoder"
+    model_type: Literal['crop-encoder'] = 'crop-encoder'
 
     image_input_name: str
     output_name: str
@@ -262,7 +260,7 @@ class RoiAlignEncoderConfig(BaseModelConfig):
         Size of the embedding produced by the model.
     """
 
-    model_type: Literal["roialign-encoder"] = "roialign-encoder"
+    model_type: Literal['roialign-encoder'] = 'roialign-encoder'
 
     image_input_name: str
     bbox_input_name: str
@@ -292,15 +290,15 @@ class DetectorConfig(BaseModelConfig):
         Default confidence threshold for detection.
     """
 
-    model_type: Literal["detector"] = "detector"
+    model_type: Literal['detector'] = 'detector'
 
     input_name: str
     output_name: str
 
     input_size: Size
 
-    iou_threshold: NamedDefaultParameter = {"name": "iou_threshold", "default": 0.1}
-    conf_threshold: NamedDefaultParameter = {"name": "conf_threshold", "default": 0.1}
+    iou_threshold: NamedDefaultParameter = {'name': 'iou_threshold', 'default': 0.1}
+    conf_threshold: NamedDefaultParameter = {'name': 'conf_threshold', 'default': 0.1}
 
 
 class SemanticSegmentatorConfig(BaseModelConfig):
@@ -329,7 +327,7 @@ class SemanticSegmentatorConfig(BaseModelConfig):
         Default is (1.0, 1.0, 1.0).
     """
 
-    model_type: Literal["semantic-segmentator"]
+    model_type: Literal['semantic-segmentator']
 
     input_name: str
     output_name: str
@@ -338,7 +336,7 @@ class SemanticSegmentatorConfig(BaseModelConfig):
 
     labels: List[str]
 
-    preprocess_mode: Literal["grey", "color"] = "grey"
+    preprocess_mode: Literal['grey', 'color'] = 'grey'
 
     mean: Tuple[float, float, float] = (0.0, 0.0, 0.0)
     std: Tuple[float, float, float] = (1.0, 1.0, 1.0)
@@ -364,7 +362,7 @@ class PointsDetectorConfig(BaseModelConfig):
         conf threshold for nms.
     """
 
-    model_type: Literal["points-detector"] = "points-detector"
+    model_type: Literal['points-detector'] = 'points-detector'
 
     input_name: str
     output_name: str
@@ -395,7 +393,7 @@ class TextRecognizerConfig(BaseModelConfig):
         of text recognition model.
     """
 
-    model_type: Literal["text-recognizer"] = "text-recognizer"
+    model_type: Literal['text-recognizer'] = 'text-recognizer'
 
     input_name: str
     output_name: str

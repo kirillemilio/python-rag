@@ -69,9 +69,9 @@ class DetectorTritonModel(BaseTritonModel[DetectorInputDict, NDArray[np.float32]
         client_timeout: float | None,
         iou_threshold_default: float,
         conf_threshold_default: float,
-        iou_threshold_name: str = "iou_threshold",
-        conf_threshold_name: str = "conf_threshold",
-        model_version: str = "1",
+        iou_threshold_name: str = 'iou_threshold',
+        conf_threshold_name: str = 'conf_threshold',
+        model_version: str = '1',
         device_id: int = 0,
         use_cushm: bool = False,
         **kwargs,
@@ -121,7 +121,7 @@ class DetectorTritonModel(BaseTritonModel[DetectorInputDict, NDArray[np.float32]
             cushm_inputs=[input_name] if use_cushm else [],
             client_timeout=client_timeout,
             model_version=model_version,
-            datatype="FP32",
+            datatype='FP32',
             device_id=device_id,
             **kwargs,
         )
@@ -187,10 +187,10 @@ class DetectorTritonModel(BaseTritonModel[DetectorInputDict, NDArray[np.float32]
         iou_threshold_ = self.iou_threshold_default if iou_threshold is None else iou_threshold
         conf_threshold_ = self.conf_threshold_default if conf_threshold is None else conf_threshold
         if iou_threshold_ < 0.0 or iou_threshold_ > 1.0:
-            raise ValueError("Parameter `iou_threshold` must be in [0.0, 1.0] range")
+            raise ValueError('Parameter `iou_threshold` must be in [0.0, 1.0] range')
         if conf_threshold_ < 0.0 or conf_threshold_ > 1.0:
-            raise ValueError("Parameter `conf_threshold` must be in [0.0, 1.0] range")
-        return {"image": image, "iou_threshold": iou_threshold_, "conf_threshold": conf_threshold_}
+            raise ValueError('Parameter `conf_threshold` must be in [0.0, 1.0] range')
+        return {'image': image, 'iou_threshold': iou_threshold_, 'conf_threshold': conf_threshold_}
 
     def set_original_size_list(self, inputs: List[DetectorInputDict]):
         """Store the original dims of each input image in the list.
@@ -206,7 +206,7 @@ class DetectorTritonModel(BaseTritonModel[DetectorInputDict, NDArray[np.float32]
         the original image dimensions.
         """
         for input_dict in inputs:
-            image = input_dict["image"]
+            image = input_dict['image']
             self.original_size_list.append(Size(h=image.shape[0], w=image.shape[1]))
 
     def clear_original_size_list(self):
@@ -247,14 +247,14 @@ class DetectorTritonModel(BaseTritonModel[DetectorInputDict, NDArray[np.float32]
         """
         self.set_original_size_list(inputs)
         return {
-            self.input_name: np.stack([input_dict["image"] for input_dict in inputs]).astype(
+            self.input_name: np.stack([input_dict['image'] for input_dict in inputs]).astype(
                 np.float32
             ),
             self.iou_threshold_name: np.array(
-                [[input_dict["iou_threshold"] for input_dict in inputs]], dtype=np.float32
+                [[input_dict['iou_threshold'] for input_dict in inputs]], dtype=np.float32
             ),
             self.conf_threshold_name: np.array(
-                [[input_dict["conf_threshold"] for input_dict in inputs]], dtype=np.float32
+                [[input_dict['conf_threshold'] for input_dict in inputs]], dtype=np.float32
             ),
         }
 

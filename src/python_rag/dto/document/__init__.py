@@ -6,4 +6,4 @@ from .chunk_with_embedding import ChunkWithEmbedding
 from .document import Document
 from .document_interface import IDocument
 
-__all__ = ["IDocument", "IChunk", "Chunk", "Document", "ChunkWithEmbedding"]
+__all__ = ['IDocument', 'IChunk', 'Chunk', 'Document', 'ChunkWithEmbedding']

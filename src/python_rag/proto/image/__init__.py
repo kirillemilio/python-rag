@@ -4,8 +4,8 @@
 # This file has been @generated
 
 __all__ = (
-	'ImageRequest',
-	'ImageResponse',
+    'ImageRequest',
+    'ImageResponse',
 )
 
 from dataclasses import dataclass
@@ -19,15 +19,15 @@ betterproto2.check_compiler_version('0.6.0')
 
 @dataclass(eq=False, repr=False)
 class ImageRequest(betterproto2.Message):
-	request_id: 'int' = betterproto2.field(1, betterproto2.TYPE_INT64)
+    request_id: 'int' = betterproto2.field(1, betterproto2.TYPE_INT64)
 
-	image: 'bytes' = betterproto2.field(2, betterproto2.TYPE_BYTES)
+    image: 'bytes' = betterproto2.field(2, betterproto2.TYPE_BYTES)
 
-	source: 'str' = betterproto2.field(3, betterproto2.TYPE_STRING)
+    source: 'str' = betterproto2.field(3, betterproto2.TYPE_STRING)
 
-	tags: 'list[str]' = betterproto2.field(4, betterproto2.TYPE_STRING, repeated=True)
+    tags: 'list[str]' = betterproto2.field(4, betterproto2.TYPE_STRING, repeated=True)
 
-	model: 'str' = betterproto2.field(5, betterproto2.TYPE_STRING)
+    model: 'str' = betterproto2.field(5, betterproto2.TYPE_STRING)
 
 
 default_message_pool.register_message('image', 'ImageRequest', ImageRequest)
@@ -35,11 +35,11 @@ default_message_pool.register_message('image', 'ImageRequest', ImageRequest)
 
 @dataclass(eq=False, repr=False)
 class ImageResponse(betterproto2.Message):
-	request_id: 'int' = betterproto2.field(1, betterproto2.TYPE_INT64)
+    request_id: 'int' = betterproto2.field(1, betterproto2.TYPE_INT64)
 
-	model: 'str' = betterproto2.field(2, betterproto2.TYPE_STRING)
+    model: 'str' = betterproto2.field(2, betterproto2.TYPE_STRING)
 
-	embeddings: 'list[float]' = betterproto2.field(3, betterproto2.TYPE_FLOAT, repeated=True)
+    embeddings: 'list[float]' = betterproto2.field(3, betterproto2.TYPE_FLOAT, repeated=True)
 
 
 default_message_pool.register_message('image', 'ImageResponse', ImageResponse)

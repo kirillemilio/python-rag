@@ -11,7 +11,7 @@ from .base_chunker import BaseChunker
 from .chunker_factory import ChunkerFactory
 
 
-@ChunkerFactory.register_chunker(chunker_type="char", config_cls=CharChunkerConfig)
+@ChunkerFactory.register_chunker(chunker_type='char', config_cls=CharChunkerConfig)
 class CharChunker(BaseChunker):
     """LangChain character text splitter wrapper."""
 
@@ -21,7 +21,7 @@ class CharChunker(BaseChunker):
     splitter: TextSplitter
 
     def __init__(
-        self, chunk_size: int = 512, chunk_overlap: int = 50, separator: str = "\n\n"
+        self, chunk_size: int = 512, chunk_overlap: int = 50, separator: str = '\n\n'
     ) -> None:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
