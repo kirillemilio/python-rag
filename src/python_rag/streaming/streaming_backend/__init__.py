@@ -1,7 +1,7 @@
 """Contains imports of streaming backend related components."""
 
 from .base_streaming_backend import BaseStreamingBackend
-from .confimration_state import EConsumerConfirmationState
+from .confirmration_state import EConsumerConfirmationState
 from .consumer import BaseStreamConsumer, KafkaStreamConsumer, RedisStreamConsumer
 from .item_with_ack_status import ItemWithAckStatus
 from .kafka_streaming_backend import KafkaStreamingBackend

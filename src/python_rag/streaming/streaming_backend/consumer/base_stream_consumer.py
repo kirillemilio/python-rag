@@ -7,7 +7,7 @@ from typing import Any, Generic, Self, Type, TypeVar
 
 from pydantic import BaseModel
 
-from ..confimration_state import EConsumerConfirmationState
+from ..confirmration_state import EConsumerConfirmationState
 
 T = TypeVar('T', bound=BaseModel)
 
