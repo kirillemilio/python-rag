@@ -59,6 +59,23 @@ services:
 
     shm_size: 8Gb
     restart: always
+  
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - rag
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
+          cpus: "2.0"
 
 volumes:
   pgdata:
