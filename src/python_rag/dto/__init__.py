@@ -4,6 +4,7 @@ from .chat_history import ChatHistory
 from .chunker import BaseChunker, ChunkerFactory, IChunker
 from .document import Chunk, Document
 from .llm_response import LLMResponse
+from .llm_stream_item import LLMStreamItem
 from .point import Point
 from .polygon import BBox, Polygon
 from .shift import Shift
@@ -21,5 +22,6 @@ __all__ = [
     'BaseChunker',
     'ChunkerFactory',
     'LLMResponse',
+    'LLMStreamItem',
     'ChatHistory',
 ]

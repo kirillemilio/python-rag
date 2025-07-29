@@ -68,7 +68,7 @@ class LLMResponse(BaseModel):
 
         Returns
         -------
-        AssistantnChatMessage
+        AssistantChatMessage
             assistant chat message corresponding to
             llm response.
         """

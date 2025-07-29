@@ -1,6 +1,7 @@
 """Contains imports of error types related to python rag project."""
 
 from .base_error import BaseError
+from .stream_producer_send_error import StreamProducerSendError
 from .triton_error import TritonError
 
-__all__ = ['BaseError', 'TritonError']
+__all__ = ['BaseError', 'TritonError', 'StreamProducerSendError']

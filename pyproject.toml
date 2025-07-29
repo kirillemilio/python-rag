@@ -17,6 +17,7 @@ dependencies = [
     "grpclib>=0.4.8",
     "gunicorn>=23.0.0",
     "imageio>=2.37.0",
+    "kafka-python>=2.2.15",
     "langchain>=0.3.25",
     "mypy-boto3-s3==1.35.61",
     "numpy==2.2",
@@ -116,7 +117,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.format]
 quote-style = "single"
-indent-style = "tab"
+indent-style = "space"
 docstring-code-format = true
 
 [dependency-groups]
