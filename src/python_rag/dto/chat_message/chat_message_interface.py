@@ -54,6 +54,28 @@ class IChatMessage(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    def get_message_id(self) -> str:
+        """Get message id.
+
+        Returns
+        -------
+        str
+            message id.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_chat_id(self) -> str:
+        """Get chat id.
+
+        Returns
+        -------
+        str
+            chat id.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
     def get_timestamp(self) -> float:
         """Get timestamp of chat message.
 

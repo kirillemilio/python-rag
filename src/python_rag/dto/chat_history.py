@@ -17,9 +17,35 @@ class ChatHistory(BaseModel):
     messages : list[ChatMessageUnion]
         messages of chat history.
         Default is empty list.
+    chat_id : str
+        chat id associated with chat history.
+    user_id : str
+        user id associated with chat history.
     """
 
     messages: list[ChatMessageUnion] = Field(default_factory=list)
+    chat_id: str
+    user_id: str
+
+    def get_chat_id(self) -> str:
+        """Get chat id associated with chat history.
+
+        Returns
+        -------
+        str
+            chat id associated with chat history.
+        """
+        return self.chat_id
+
+    def get_user_id(self) -> str:
+        """Get user id associated with chat history.
+
+        Returns
+        -------
+        str
+            user id associated with chat history.
+        """
+        return self.user_id
 
     def get_messages(self) -> Sequence[ChatMessageUnion]:
         """Get sequence of chat messages.

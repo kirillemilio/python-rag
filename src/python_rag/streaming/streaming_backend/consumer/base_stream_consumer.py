@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Self, Type, TypeVar
 
@@ -10,6 +11,9 @@ from pydantic import BaseModel
 from ..confirmration_state import EConsumerConfirmationState
 
 T = TypeVar('T', bound=BaseModel)
+
+
+logger = logging.getLogger(__name__)
 
 
 class BaseStreamConsumer(ABC, Generic[T]):
@@ -100,9 +104,28 @@ class BaseStreamConsumer(ABC, Generic[T]):
         BaseModel
             pydantic item.
         """
-        raw_item = self.next_raw()
-        item = self.item_builder.model_validate_json(raw_item)
-        return item
+        while True:
+            try:
+                raw_item = self.next_raw()
+            except Exception:
+                logger.error(
+                    f'Error when fetching raw item: {raw_item},'
+                    + f' stream `{self.stream_name}`, consumer_group `{self.consumer_group}`, '
+                    + f' consumer `{self.consumer_name}`',
+                    exc_info=True,
+                )
+                continue
+            try:
+                item = self.item_builder.model_validate_json(raw_item)
+            except Exception:
+                logger.error(
+                    f'Error when parsing item: {raw_item} to {self.item_builder}, '
+                    + f' stream `{self.stream_name}`, consumer_group `{self.consumer_group}`, '
+                    + f' consumer `{self.consumer_name}`',
+                    exc_info=True,
+                )
+                continue
+            return item
 
     def __iter__(self) -> Self:
         """Get iterator of stream consumer.

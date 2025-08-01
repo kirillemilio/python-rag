@@ -10,6 +10,17 @@ class LLMStreamItem(BaseModel):
 
     content: str
     num_tokens: int
+    is_final: bool
+
+    def is_done(self) -> bool:
+        """Check whether this content if final.
+
+        Returns
+        -------
+        bool
+            True if content is final False otherwise.
+        """
+        return self.is_final
 
     def get_content(self) -> str:
         """Get content.

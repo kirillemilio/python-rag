@@ -132,7 +132,9 @@ class HuggingfaceLLM(ILLM):
             if len(next_yield_text):
                 last_generated_text = current_text
                 yield LLMStreamItem(
-                    content=next_yield_text, num_tokens=len(generated_ids) - last_generated_index
+                    content=next_yield_text,
+                    num_tokens=len(generated_ids) - last_generated_index,
+                    is_final=False,
                 )
                 last_generated_index = len(generated_ids)
 
@@ -163,8 +165,10 @@ class HuggingfaceLLM(ILLM):
                     yield LLMStreamItem(
                         content=next_yield_text,
                         num_tokens=len(generated_ids) - last_generated_index,
+                        is_final=False,
                     )
                     last_generated_index = len(generated_ids)
+        yield LLMStreamItem(content='', num_tokens=0, is_final=True)
 
     def get_response_on_chat(
         self,

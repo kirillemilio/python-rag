@@ -22,11 +22,17 @@ class BaseChatMessage(BaseModel, IChatMessage):
         content of message.
     message_type : Literal["user", "assistant", "system"]
         message type that act as a primary discriminator field.
+    message_id : str
+        message id.
+    chat_id : str
+        chat id.
     """
 
     timestamp: float
     text: str
     message_type: Literal['user', 'assistant', 'system']
+    message_id: str
+    chat_id: str
 
     def get_text(self) -> str:
         """Get get chat message text.
@@ -47,6 +53,26 @@ class BaseChatMessage(BaseModel, IChatMessage):
             message type.
         """
         return self.message_type
+
+    def get_message_id(self) -> str:
+        """Get message id.
+
+        Returns
+        -------
+        str
+            message id.
+        """
+        return self.message_id
+
+    def get_chat_id(self) -> str:
+        """Get chat id.
+
+        Returns
+        -------
+        str
+            chat id.
+        """
+        return self.chat_id
 
     def get_timestamp(self) -> float:
         """Get timestamp of message.

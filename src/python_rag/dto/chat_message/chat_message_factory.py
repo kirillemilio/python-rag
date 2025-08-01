@@ -21,6 +21,12 @@ class ChatMessageFactory:
         ----------
         message_dict : dict[str, Any]
             chat message dictionary.
+            Must contain at least following fields:
+                - timestamp: float
+                - text: str
+                - message_type: str
+                - message_id: str
+                - chat_id: str
 
         Returns
         -------
