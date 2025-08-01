@@ -31,7 +31,8 @@ class ILLM(ABC):
         ----------
         query : str
             formatted query for llm.
-        temperature : float | None
+        temperature
+        : float | None
             optional temperature for sampling.
             Default is None meaning that argmax sampling
             strategy will be used.

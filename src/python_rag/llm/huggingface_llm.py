@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 import time
-from typing import Iterator, Protocol, cast
+from typing import Any, Iterator, Protocol, cast
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from ..config.llm import HuggingFaceLLMConfig
 from ..dto import ChatHistory, LLMResponse, LLMStreamItem
 from ..dto.chat_message import RolesMappingTypedDict
-from .llm_interface import ILLM
+from .base_llm import BaseLLM
+from .llm_factory import LLMFactory
 
 
 class WithLogitsProtocol(Protocol):
@@ -28,7 +30,8 @@ class WithLogitsProtocol(Protocol):
         ...
 
 
-class HuggingfaceLLM(ILLM):
+@LLMFactory.register_llm_model('huggingface', HuggingFaceLLMConfig)
+class HuggingfaceLLM(BaseLLM):
     """Huggingface LLM model implementation."""
 
     model: AutoModelForCausalLM
@@ -227,4 +230,30 @@ class HuggingfaceLLM(ILLM):
         """
         yield from self.stream_response_on_query(
             query='\n'.join(chat_history.format_messages(roles_mapping=roles_mapping))
+        )
+
+    @classmethod
+    def from_config(cls, config_dict: dict[str, Any]) -> HuggingfaceLLM:
+        """Create hugging face llml from configuration dictionary.
+
+        Parameters
+        ----------
+        config_dict : dict[str, Any]
+            configuration dictionary that will be used
+            to create HuggingFace llm.
+            Must be parsed into HuggingFaceLLMConfig
+
+        Returns
+        -------
+        HuggingfaceLLM
+            instance of hugging face llm created from config.
+        """
+        config = HuggingFaceLLMConfig.model_validate(config_dict)
+        model = AutoModelForCausalLM.from_pretrained(config.hub_name)
+        if torch.cuda.is_available() and config.use_cuda:
+            model = model.cuda()
+        return HuggingfaceLLM(
+            name=config.model_name,
+            model=model,
+            tokenizer=AutoTokenizer.from_pretrained(config.hub_name),
         )

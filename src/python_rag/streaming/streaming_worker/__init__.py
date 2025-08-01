@@ -2,6 +2,12 @@
 
 from .base_streaming_worker import BaseStreamingWorker
 from .redis_streaming_worker import RedisStreamingWorker
+from .streaming_worker_builder import StreamingWorkerBuilder
 from .streaming_worker_interface import IStreamingWorker
 
-__all__ = ['BaseStreamingWorker', 'RedisStreamingWorker', 'IStreamingWorker']
+__all__ = [
+    'BaseStreamingWorker',
+    'RedisStreamingWorker',
+    'IStreamingWorker',
+    'StreamingWorkerBuilder',
+]

@@ -117,6 +117,16 @@ class RedisStreamingBackend(BaseStreamingBackend):
             item_builder=item_builder, stream_name=stream_name, redis_instance=self.redis
         )
 
+    def get_redis(self) -> redis.Redis | redis.RedisCluster:
+        """Get underlying redis instance.
+
+        Returns
+        -------
+        redis.Redis | redis.RedisCluster
+            redis instance.
+        """
+        return self.redis
+
     @classmethod
     def from_config(cls, config_dict: dict[str, Any]) -> RedisStreamingBackend:
         """Create redis streaming backend from raw configuration dictionary.

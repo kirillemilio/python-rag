@@ -55,6 +55,26 @@ class BaseStreamingWorker(IStreamingWorker):
         """
         return self.streaming_backend
 
+    def get_llm(self) -> ILLM:
+        """Get worker underlying llm instance.
+
+        Returns
+        -------
+        ILLM
+            worker's underlying llm.
+        """
+        return self.llm
+
+    def get_temperature(self) -> float | None:
+        """Get sampling temperature for llm.
+
+        Returns
+        -------
+        float | None
+            sampling temperature for llm.
+        """
+        return self.sampling_temperature
+
     def get_consumer(self) -> BaseStreamConsumer[ChatHistory]:
         """Get input consumer.
 
