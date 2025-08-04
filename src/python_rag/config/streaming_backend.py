@@ -120,6 +120,9 @@ class KafkaStreamingBackendConfigTypedDict(TypedDict):
     kafka_servers: Required[list[str]]
 
 
+StreamingBackendConfigUnion = RedisStreamingBackendConfig | KafkaStreamingBackendConfig
+
+
 StreamingBackendConfigTypedDict = (
     RedisStreamingBackendConfigTypedDict | KafkaStreamingBackendConfigTypedDict
 )

@@ -48,7 +48,6 @@ class RedisSingleInstanceConfigTypedDict(TypedDict):
     port: Required[int]
     db: Required[int]
     password: str | None
-    decode_responses: bool
 
 
 class RedisClusterConfigTypedDict(TypedDict):
@@ -56,7 +55,6 @@ class RedisClusterConfigTypedDict(TypedDict):
 
     backend_type: Required[Literal['redis-cluster']]
     startup_nodes: Required[list[str]]
-    decode_responses: bool
     password: str | None
     skip_full_coverage_check: bool
 

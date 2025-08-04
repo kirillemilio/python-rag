@@ -23,6 +23,7 @@ class RedisStreamConsumer(BaseStreamConsumer[T], Generic[T]):
     Attributes
     ----------
     redis : redis.Redis | redis.RedisCluster
+        redis instance or cluster that will be used for streaming.
     """
 
     redis: redis.Redis | redis.RedisCluster
@@ -41,7 +42,7 @@ class RedisStreamConsumer(BaseStreamConsumer[T], Generic[T]):
         stream_name: str,
         consumer_group: str,
         consumer_name: str,
-        redis_instance: redis.Redis | redis.RedisCluster,
+        redis_instance: redis.Redis | redis.RedisCluster,  # type: ignore
         timeout: int,
         buffer_max_size: int = 10,
     ) -> None:

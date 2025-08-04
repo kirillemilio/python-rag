@@ -43,7 +43,7 @@ class RedisStreamingBackend(BaseStreamingBackend):
 
     def __init__(
         self,
-        redis_instance: redis.Redis | redis.RedisCluster,
+        redis_instance: redis.Redis | redis.RedisCluster,  # type: ignore
         buffer_max_size: int = 10,
         stream_ack_timeout: int = 30000,
     ) -> None:

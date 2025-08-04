@@ -44,7 +44,7 @@ class BaseStreamingWorker(IStreamingWorker):
     def get_streaming_backend(self) -> IStreamingBackend:
         """Get streaming backend associated with streaming worker.
 
-        Redist streaming worker uses redis for stats of streaming
+        Redis streaming worker uses redis for stats of streaming
         update, while streaming backend can be different(e.g. Kafka).
 
         Returns
