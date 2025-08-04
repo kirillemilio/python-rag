@@ -90,20 +90,21 @@ class RedisStreamConsumer(BaseStreamConsumer[T], Generic[T]):
                 self.consumer_group,
                 self.consumer_name,
                 min_idle_time=int(self.timeout),
-                message_ids=[m.message_id for m in messages],
+                message_ids=[m['message_id'] for m in messages],
                 force=True,
             )
             for message_id, m in claimed:
                 if (data := m.get(b'data')) is not None:
                     self.buffer.append((message_id, data))
 
-    def next_raw(self) -> str:
-        """Get next str item from stream consumer.
+    def next_raw(self) -> str | None:
+        """Get next str item or None from stream consumer.
 
         Returns
         -------
         str
-            raw string encoded item from stream consumer.
+            raw string encoded item from stream consumer
+            if it was able to fetch or None.
         """
         self.reclaim_pending_messages()
         if len(self.buffer) < self.buffer_max_size:
@@ -117,6 +118,10 @@ class RedisStreamConsumer(BaseStreamConsumer[T], Generic[T]):
                 for message_id, fields in messages:
                     if (data := fields.get(b'data')) is not None:
                         self.buffer.append((message_id, data))
+
+        if not len(self.buffer):
+            return None
+
         message_id, item = self.buffer.popleft()
         self.last_raw_item = item
         self.last_message_id = message_id

@@ -14,7 +14,7 @@ class StreamingBackendFactory:
     """Implementation of streaming backend factory class."""
 
     _configs: ClassVar[dict[str, Type[BaseStreamingBackendConfig]]] = {}
-    _backends: ClassVar[dict[str, Type[BaseStreamingBackend]]]
+    _backends: ClassVar[dict[str, Type[BaseStreamingBackend]]] = {}
     _names: ClassVar[dict[Type[BaseStreamingBackend], str]] = {}
 
     @classmethod

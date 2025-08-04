@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from ...dto import ChatHistory, LLMStreamItem
 from ...llm import ILLM
 from ..streaming_backend import (
@@ -11,6 +13,8 @@ from ..streaming_backend import (
     IStreamingBackend,
 )
 from .streaming_worker_interface import IStreamingWorker
+
+logger = logging.getLogger(__name__)
 
 
 class BaseStreamingWorker(IStreamingWorker):
@@ -124,4 +128,5 @@ class BaseStreamingWorker(IStreamingWorker):
 
                     response_item >> stream_producer
 
-            EConsumerConfirmationState.ACK >> stream_consumer
+                logger.info(f'Processed input: {chat_history}')
+                EConsumerConfirmationState.ACK >> stream_consumer

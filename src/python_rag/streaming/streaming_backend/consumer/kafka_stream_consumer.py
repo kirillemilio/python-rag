@@ -69,13 +69,14 @@ class KafkaStreamConsumer(BaseStreamConsumer[T], Generic[T]):
         self.last_item_ack = True
         self.last_raw_item = None
 
-    def next_raw(self) -> str:
-        """Get next str item from stream consumer.
+    def next_raw(self) -> str | None:
+        """Get next str item or None from stream consumer.
 
         Returns
         -------
         str
-            raw string encoded item from stream consumer.
+            raw string encoded item from stream consumer
+            if it was able to fetch or None.
         """
         item = self.consumer.__next__().value
         self.last_raw_item = item

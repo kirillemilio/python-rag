@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import logging
 
 from ..config.streaming_worker_config import StreamingWorkerConfig
 from ..streaming.streaming_worker import StreamingWorkerBuilder
 from .utils import ConfigLoader
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def run_streaming_worker(config_path: str) -> None:

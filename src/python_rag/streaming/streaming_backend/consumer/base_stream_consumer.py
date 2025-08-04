@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Self, Type, TypeVar
 
@@ -56,13 +57,14 @@ class BaseStreamConsumer(ABC, Generic[T]):
         raise NotImplementedError()
 
     @abstractmethod
-    def next_raw(self) -> str:
-        """Get next str item from stream consumer.
+    def next_raw(self) -> str | None:
+        """Get next str item or None from stream consumer.
 
         Returns
         -------
         str
-            raw string encoded item from stream consumer.
+            raw string encoded item from stream consumer
+            if it was able to fetch or None.
         """
         raise NotImplementedError()
 
@@ -107,6 +109,8 @@ class BaseStreamConsumer(ABC, Generic[T]):
         while True:
             try:
                 raw_item = self.next_raw()
+            except StopIteration as e:
+                raise e
             except Exception:
                 logger.error(
                     f'Error when fetching raw item: {raw_item},'
@@ -115,6 +119,11 @@ class BaseStreamConsumer(ABC, Generic[T]):
                     exc_info=True,
                 )
                 continue
+
+            if raw_item is None:
+                time.sleep(0.05)
+                continue
+
             try:
                 item = self.item_builder.model_validate_json(raw_item)
             except Exception:
@@ -125,6 +134,8 @@ class BaseStreamConsumer(ABC, Generic[T]):
                     exc_info=True,
                 )
                 continue
+
+            logger.info(f'Fetched item from stream: {item}')
             return item
 
     def __iter__(self) -> Self:

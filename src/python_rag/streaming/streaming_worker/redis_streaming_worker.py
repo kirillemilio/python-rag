@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import time
 
 import redis
@@ -12,6 +13,8 @@ from ..streaming_backend import (
     IStreamingBackend,
 )
 from .base_streaming_worker import BaseStreamingWorker
+
+logger = logging.getLogger(__name__)
 
 
 class RedisStreamingWorker(BaseStreamingWorker):
@@ -105,4 +108,5 @@ class RedisStreamingWorker(BaseStreamingWorker):
                             'is_done': int(response_item.is_done()),
                         },
                     )
-            EConsumerConfirmationState.ACK >> stream_consumer
+                logger.info(f'Processed input: {chat_history}')
+                EConsumerConfirmationState.ACK >> stream_consumer
