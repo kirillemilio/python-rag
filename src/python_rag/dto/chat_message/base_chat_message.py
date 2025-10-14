@@ -2,13 +2,37 @@
 
 from __future__ import annotations
 
-from typing import Literal, TypeVar
+from typing import Literal, TypeVar, TypedDict, Required
 
 from pydantic import BaseModel
 
 from .chat_message_interface import IChatMessage
 
 T = TypeVar('T', bound='BaseChatMessage')
+
+
+class BaseChatMessageTypedDict(TypedDict):
+    """Base chat message typed dictinoary definition.
+    
+    Attributes
+    ----------
+    timestamp : Required[float]
+        timestamp of message.
+    text : Required[str]
+        content of message.
+    message_type : Required[Literal["user", "assistant", "system"]]
+        message type that act as a primary discriminator field.
+    message_id : Required[str]
+        message id.
+    chat_id : Required[str]
+        chat id.
+    """
+
+    timestamp: Required[float]
+    text: Required[str]
+    message_type: Required[Literal["user", "assistant", "system"]]
+    message_id: Required[str]
+    chat_id: Required[str]
 
 
 class BaseChatMessage(BaseModel, IChatMessage):
